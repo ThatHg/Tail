@@ -165,35 +165,31 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetsManager.cpp" />
+    <ClCompile Include="Breed.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="EntityRegister.cpp" />
-    <ClCompile Include="EntityStateManager.cpp" />
-    <ClCompile Include="Event.cpp" />
-    <ClCompile Include="GlobalClock.cpp" />
+    <ClCompile Include="FollowingState.cpp" />
+    <ClCompile Include="GameTime.cpp" />
+    <ClCompile Include="IdlingState.cpp" />
     <ClCompile Include="Level.cpp" />
-    <ClCompile Include="Melee.cpp" />
-    <ClCompile Include="Ranger.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetsManager.h" />
+    <ClInclude Include="Breed.h" />
     <ClInclude Include="Config.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyState.h" />
     <ClInclude Include="Entity.h" />
-    <ClInclude Include="EntityRegister.h" />
-    <ClInclude Include="EntityStateManager.h" />
-    <ClInclude Include="Event.h" />
-    <ClInclude Include="GlobalClock.h" />
+    <ClInclude Include="FollowingState.h" />
+    <ClInclude Include="GameTime.h" />
     <ClInclude Include="Helper.h" />
+    <ClInclude Include="IdlingState.h" />
     <ClInclude Include="Level.h" />
-    <ClInclude Include="Melee.h" />
-    <ClInclude Include="Ranger.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="follower.lua" />
     <None Include="level.lua" />
-    <None Include="melee_boss.lua" />
-    <None Include="melee_trainee.lua" />
-    <None Include="ranger_boss.lua" />
-    <None Include="ranger_trainee.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

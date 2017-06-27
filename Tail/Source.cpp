@@ -19,8 +19,7 @@ int main()
 
         window.clear(sf::Color(100,50,50,255));
 
-        level.Update();
-        level.Render(window);
+        level.Update(window);
 
         window.display();
     }

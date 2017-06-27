@@ -23,7 +23,7 @@ inline void Normalize(sf::Vector2f& vector)
     }
 }
 
-inline float RotationDeg2D(sf::Vector2f& from, sf::Vector2f to)
+inline float RotationDeg2D(const sf::Vector2f& from, const sf::Vector2f to)
 {
     float dx = to.x - from.x;
     float dy = to.y - from.y;

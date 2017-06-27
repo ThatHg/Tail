@@ -9,8 +9,7 @@ class AssetsManager
 {
 public:
     ~AssetsManager();
-    static AssetsManager& GetReference();
-    static AssetsManager* GetPointer();
+    static AssetsManager& Ref();
     const sf::Texture& GetTexture(const std::string& name);
 
     void ReleaseTextures();
@@ -20,15 +19,12 @@ private:
     
     AssetsManager();
     AssetsManager(const AssetsManager& am);
-    AssetsManager&	operator=(const AssetsManager& am);
 
     bool AddTexture(std::string name);
 
     static AssetsManager m_instance;
     TextureMap m_textures;
     TextureMapIterator m_textureIterator;
-    
-
 };
 
 #endif

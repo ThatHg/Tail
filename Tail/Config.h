@@ -7,14 +7,14 @@
 class Config
 {
 public:
-    Config(const char* filename) : m_state(luaL_newstate())
+    Config(const std::string& filename) : m_state(luaL_newstate())
     {
         if(m_state == 0)
             std::cerr << "\nERROR: Unable to create lua state." << std::endl;
 
         luaL_openlibs(m_state);
  
-        if(luaL_dofile(m_state, filename))
+        if(luaL_dofile(m_state, filename.c_str()))
         {
             const char* err = lua_tostring(m_state, -1);
             std::cerr << "\nERROR: " << err;

@@ -6,14 +6,9 @@ using namespace std;
 const static string PICTURE_PATH = "Assets/Pictures/";
 
 AssetsManager AssetsManager::m_instance;
-AssetsManager&	AssetsManager::GetReference()
+AssetsManager&	AssetsManager::Ref()
 {
     return m_instance;
-}
-
-AssetsManager*	AssetsManager::GetPointer()
-{
-    return &m_instance;
 }
 
 AssetsManager::AssetsManager(){}

@@ -1,12 +1,9 @@
-#include "Level.h"
-#include "Entity.h"
-#include "Melee.h"
-#include "Ranger.h"
 #include <iostream>
-#include "AssetsManager.h"
+#include "Level.h"
+#include "Enemy.h"
+#include "Entity.h"
 #include "Helper.h"
-#include "GlobalClock.h"
-
+#include "Breed.h"
 #include <sstream>
 
 using namespace std;
@@ -20,30 +17,26 @@ void CallLua(lua_State* state, char* funcName, void* userData) {
     lua_call(state, 1, 0);
 }
 
-static void lua_Spawn(Level* level, const char* filename, const char* texture, const int type)
+static void lua_Spawn(Level* level, const std::string& filename)
 {
-    level->Spawn(filename, texture, type);
+    level->Spawn(filename);
 }
 
-static int lua_SpawnWrapper(lua_State* state)
-{
+static int lua_SpawnWrapper(lua_State* state) {
     const int arguments = lua_gettop(state);
-    if(arguments != 4)
+    if (arguments != 2) {
         cerr << "\nERROR: Invalid amount of arguments on stack. [" << arguments << "]";
-    if(!lua_islightuserdata(state, 1))
+    }
+    if (!lua_islightuserdata(state, 1)) {
         cerr << "\nERROR: First argument is not of type [light user data].";
-    if(!lua_isstring(state, 2))
-        cerr << "\nERROR: Second argument is not of type [string].";
-    if(!lua_isstring(state, 3))
-        cerr << "\nERROR: Third argument is not of type [string].";
-    if(!lua_isnumber(state, 4))
-        cerr << "\nERROR: Fourth argument is not of type [number].";
+    }
+    if (!lua_isstring(state, 2)) {
+        cerr << "\nERROR: Second argument is not of typ [string].";
+    }
 
     Level* level = (Level*)(lua_touserdata(state, 1));
     const char* filename = lua_tostring(state, 2);
-    const char*	texture = lua_tostring(state, 3);
-    const int type = (int)lua_tonumber(state, 4);
-    lua_Spawn(level, filename, texture, type);
+    lua_Spawn(level, filename);
 
     return 0;
 }
@@ -95,8 +88,7 @@ Level::Level(const char* filename) :
     m_maxEnemiesSpawend(6),
     m_entities(),
     m_types(),
-    m_mgr(),
-    m_register()
+    m_gameTime(0.01)
 {
     if(m_state == 0)
         cerr << "\nERROR: Unable to create lua state." << endl;
@@ -138,90 +130,50 @@ void Level::Render(sf::RenderWindow& window)
 
     for(Entities::iterator eItr = m_entities.begin(); eItr != m_entities.end(); eItr++)
     {
-        sf::Vector2f pos = (*eItr)->GetPosition();
+        // Debug text for entities
         stringstream ss;
         sf::Text text;
         text.setFont(font);
         text.setCharacterSize(12);
         text.setFillColor(sf::Color(0,200,0));
-
-        switch ((*eItr)->GetType())
-        {
-        case 0: ss << "Type: Melee Trainee" << endl; break;
-        case 1: ss << "Type: Ranger Trainee" << endl; break;
-        case 2: ss << "Type: Melee Boss" << endl; break;
-        case 3: ss << "Type: Ranger Boss" << endl; break;
-        default: ss << "Type: Undefined" << endl; break;
-        }
         ss << "LookAt: (" << (*eItr)->GetLookAt().x << ", " << (*eItr)->GetLookAt().y << ")" << endl;
         ss << "Position: (" << (*eItr)->GetPosition().x << ", " << (*eItr)->GetPosition().y << ")" << endl;
         ss << "Rotation: " << (*eItr)->GetRotation() << endl;
         ss << "Target: (" << (*eItr)->GetTarget().x << ", " << (*eItr)->GetTarget().y << ")" << endl;
-        ss << "Walking Speed: " << (*eItr)->GetWalkingSpeed() << endl;
-        ss << "Is Alive: " << (*eItr)->IsAlive() << endl;
-        ss << (*eItr)->GetDump().str() << endl;
         text.setPosition((*eItr)->GetPosition());
         text.setString(ss.str());
         window.draw(text);
+
+        // Draw entities
         window.draw((*eItr)->GetSprite());
-        sf::Sprite sprite = (*eItr)->GetSprite();
-        sprite.setPosition((*eItr)->GetTarget());
-        sprite.setRotation(0);
-        window.draw(sprite);
     }
 }
 
-void Level::Update()
+void Level::Update(sf::RenderWindow& window)
 {
-    GlobalClock::Ref().Reset();
+    m_gameTime.Accumulate();
 
-    for(Entities::iterator eItr = m_entities.begin(); eItr != m_entities.end(); eItr++)
-    {
-        if(!(*eItr)->IsAlive())
-        {
-            m_types.push((*eItr)->GetType());
-
-            // Delete enemy *********
-            m_register.Unlist(*eItr, m_mgr);
-            eItr = m_entities.erase(eItr);
-            CallLua(m_state, "spawn_enemy", this);
+    while (m_gameTime.StepForward()) {
+        for (Entities::iterator eItr = m_entities.begin(); eItr != m_entities.end(); eItr++) {
+            (*eItr)->Update(window, m_gameTime.DeltaTime());
         }
-        else
-            (*eItr)->Update(&m_mgr);
     }
+
+    Render(window);
 }
 
-void Level::Spawn(const char* filename, const char* texture, int type)
+void Level::Spawn(const std::string& filename)
 {
-    // Spawn new enemies
-    float x = (float)Random(0, 1280);
-    float y = (float)Random(0, 720);
-    bool error = false;
-    switch (type)
-    {
-    case 0:
-        m_entities.push_back(new Melee(	m_entities.size(),
-                                        type,
-                                        sf::Sprite(AssetsManager::GetReference().GetTexture(texture)),
-                                        sf::Vector2f(x,y),
-                                        filename));
-        break;
-    case 1:
-        m_entities.push_back(new Ranger(m_entities.size(),
-                                        type,
-                                        sf::Sprite(AssetsManager::GetReference().GetTexture(texture)),
-                                        sf::Vector2f(x,y),
-                                        filename));
-        break;
-    default:
-        cerr << "\nERROR invalid type [" << type << "]";
-        error = true;
-        break;
-    }
+    Breed* breed = GetBreed(filename);
 
-    if(!error)
-        m_register.List(m_entities.back(), m_mgr);
+    // Factorize a new enemy from breed and set spawn.
+    Entity* entity = breed->NewEnemy();
+    entity->SetPosition(
+        sf::Vector2f(
+            (float)Random(0, 1280), 
+            (float)Random(0, 720)));
 
+    m_entities.push_back(entity);
 }
 
 int Level::GetMaxEnemiesPerLevel()
@@ -232,6 +184,32 @@ int Level::GetMaxEnemiesPerLevel()
 int Level::GetMaxEnemiesSpawend()
 {
     return m_maxEnemiesSpawend;
+}
+
+Breed* Level::GetBreed(const std::string& filename) {
+    EnemyBreeds::iterator itr = m_breeds.find(filename);
+    if (itr != m_breeds.end()) {
+        return itr->second;
+    }
+    else {
+        // Load enemy variables from lua file
+        Config enemyConfig(filename);
+        double health = enemyConfig.GrabReal("HEALTH");
+        double walkingSpeed = enemyConfig.GrabReal("WALKING_SPEED");
+        const char* followingSprite = enemyConfig.GrabString("FOLLOWING_SPRITE");
+        const char* idlingSprite = enemyConfig.GrabString("IDLING_SPRITE");
+
+        Breed *breed = new Breed(
+            health,
+            walkingSpeed,
+            idlingSprite,
+            followingSprite
+            );
+
+        // Create an enemy breed
+        m_breeds[filename] = breed;
+        return breed;
+    }
 }
 
 int Level::GetTypeToSpawn()

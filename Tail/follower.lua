@@ -1,0 +1,4 @@
+HEALTH = 1000.0;
+WALKING_SPEED = 4.0;
+FOLLOWING_SPRITE = "following.png";
+IDLING_SPRITE = "idling.png";
