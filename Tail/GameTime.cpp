@@ -1,14 +1,17 @@
 #include "GameTime.h"
+#include "Clock.h"
 
-GameTime::GameTime(double stepSize):
+GameTime::GameTime(double stepSize, Clock* clock):
     m_accumulator(0.0),
     m_alpha(0.0),
     m_simulatedTime(0.0),
-    m_currentTime(m_clock.getElapsedTime().asSeconds()),
-    m_stepSize(stepSize) {
+    m_currentTime(0.0),
+    m_stepSize(stepSize),
+    m_clock(clock){
 }
 
 GameTime::~GameTime() {
+    delete m_clock;
 }
 
 bool GameTime::StepForward() {
@@ -32,7 +35,7 @@ double GameTime::BlendFactor() {
 }
 
 void GameTime::Accumulate() {
-    double newTime = (double)m_clock.getElapsedTime().asSeconds();
+    double newTime = m_clock.Time();
     double delta = newTime - m_currentTime;
     // Prevent simulated system to blow up
     // by restricting delta size

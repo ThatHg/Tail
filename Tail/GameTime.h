@@ -2,12 +2,13 @@
 #define GAME_TIME_H
 
 #include <SFML\Graphics.hpp>
+class Clock;
 
 // Based on the article "Fix your timestep" by Glenn Fiedler
 
 class GameTime {
 public:
-    GameTime(double stepSize);
+    GameTime(double stepSize, Clock* clock);
     ~GameTime();
     bool StepForward();             // Will step through divided accumulated time, nessesary when doing physics calculation. returns true when stepping is finished.
     double DeltaTime();             // Time since last frame
@@ -20,7 +21,7 @@ private:
     double m_simulatedTime;
     double m_currentTime;
     const double m_stepSize;        // Step size which will divide accumulated time into chunks.
-    sf::Clock m_clock;
+    Clock* m_clock;
 };
 
 #endif

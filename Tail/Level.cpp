@@ -1,10 +1,11 @@
 #include <iostream>
+#include <sstream>
 #include "Level.h"
 #include "Enemy.h"
 #include "Entity.h"
 #include "Helper.h"
 #include "Breed.h"
-#include <sstream>
+#include "SFMLClockWrapper.h"
 
 using namespace std;
 
@@ -88,7 +89,7 @@ Level::Level(const char* filename) :
     m_maxEnemiesSpawend(6),
     m_entities(),
     m_types(),
-    m_gameTime(0.01)
+    m_gameTime(0.01, new SFMLClockWrapper())
 {
     if(m_state == 0)
         cerr << "\nERROR: Unable to create lua state." << endl;

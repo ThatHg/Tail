@@ -177,6 +177,7 @@
   <ItemGroup>
     <ClInclude Include="AssetsManager.h" />
     <ClInclude Include="Breed.h" />
+    <ClInclude Include="Clock.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyState.h" />
@@ -186,6 +187,7 @@
     <ClInclude Include="Helper.h" />
     <ClInclude Include="IdlingState.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="SFMLClockWrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="follower.lua" />
