@@ -22,19 +22,18 @@ public:
     void Update(sf::RenderWindow& window);
     void Spawn(const std::string& filename);
     int GetTypeToSpawn();
-    int GetMaxEnemiesPerLevel();
-    int GetMaxEnemiesSpawend();
-
-
+    int GetEnemyPerLevelCount();
+    int GetStartEnemyCount();
 private:
     typedef std::vector<Entity*> Entities;
     typedef std::map<std::string, Breed*> EnemyBreeds;
 
     Breed* GetBreed(const std::string& filename);
+    void LoadLevel(const std::string& filename);
     void Render(sf::RenderWindow& window);
 
-    int m_maxEnemiesPerLevel;
-    int m_maxEnemiesSpawend;
+    int m_enemiesPerLevelCount;
+    int m_startEnemyCount;
     Entities m_entities;
     EnemyBreeds m_breeds;
     lua_State* m_state;

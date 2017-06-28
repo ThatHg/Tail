@@ -42,12 +42,12 @@ static int lua_SpawnWrapper(lua_State* state) {
     return 0;
 }
 
-static int lua_GetMaxEnemiesSpawned(Level* level)
+static int lua_GetStartEnemyCount(Level* level)
 {
-    return level->GetMaxEnemiesSpawend();
+    return level->GetStartEnemyCount();
 }
 
-static int lua_GetMaxEnemiesSpawnedWrapper(lua_State* state)
+static int lua_GetStartEnemyCountWrapper(lua_State* state)
 {
 
     const int arguments = lua_gettop(state);
@@ -55,7 +55,7 @@ static int lua_GetMaxEnemiesSpawnedWrapper(lua_State* state)
         cerr << "\nERROR: Invalid amount of arguments on stack. [" << arguments << "]";
 
     Level* level = (Level*)(lua_touserdata(state, 1));
-    int number = lua_GetMaxEnemiesSpawned(level);
+    int number = lua_GetStartEnemyCount(level);
     lua_pushnumber(state, number);
 
     return 1;
@@ -85,8 +85,8 @@ static int lua_GetTypeToSpawnWrapper(lua_State* state)
 
 Level::Level(const char* filename) :
     m_state(luaL_newstate()),
-    m_maxEnemiesPerLevel(100),
-    m_maxEnemiesSpawend(6),
+    m_enemiesPerLevelCount(0),
+    m_startEnemyCount(0),
     m_entities(),
     m_types(),
     m_gameTime(0.01, new SFMLClockWrapper())
@@ -103,7 +103,7 @@ Level::Level(const char* filename) :
     }
 
     lua_register(m_state, "spawn", lua_SpawnWrapper);
-    lua_register(m_state, "get_maxenemies", lua_GetMaxEnemiesSpawnedWrapper);
+    lua_register(m_state, "get_startenemycount", lua_GetStartEnemyCountWrapper);
     lua_register(m_state, "get_typetospawn", lua_GetTypeToSpawnWrapper);
 }
 
@@ -121,6 +121,7 @@ Level::~Level()
 void Level::Initialize()
 {
     // Initialize first wave of enemies
+    LoadLevel("level1.lua");
     CallLua(m_state, "initialize", this);
 }
 
@@ -128,38 +129,33 @@ void Level::Render(sf::RenderWindow& window)
 {
     sf::Font font;
     font.loadFromFile("Assets/Fonts/consola.ttf");
+    stringstream ss;
+    sf::Text text;
+    text.setFont(font);
+    text.setCharacterSize(12);
+    text.setFillColor(sf::Color(0, 0, 0));
+    double delta = m_gameTime.DeltaTime();
+    ss << "FPS: " << 1 / (delta == 0.0 ? 1 : delta);
+    text.setPosition(sf::Vector2f(10.0f,10.0f));
+    text.setString(ss.str());
+    window.draw(text);
 
-    for(Entities::iterator eItr = m_entities.begin(); eItr != m_entities.end(); eItr++)
+    // Draw entities
+    for (int i = 0; i < m_entities.size(); ++i)
     {
-        // Debug text for entities
-        stringstream ss;
-        sf::Text text;
-        text.setFont(font);
-        text.setCharacterSize(12);
-        text.setFillColor(sf::Color(0,200,0));
-        ss << "LookAt: (" << (*eItr)->GetLookAt().x << ", " << (*eItr)->GetLookAt().y << ")" << endl;
-        ss << "Position: (" << (*eItr)->GetPosition().x << ", " << (*eItr)->GetPosition().y << ")" << endl;
-        ss << "Rotation: " << (*eItr)->GetRotation() << endl;
-        ss << "Target: (" << (*eItr)->GetTarget().x << ", " << (*eItr)->GetTarget().y << ")" << endl;
-        text.setPosition((*eItr)->GetPosition());
-        text.setString(ss.str());
-        window.draw(text);
-
-        // Draw entities
-        window.draw((*eItr)->GetSprite());
+        window.draw(m_entities[i]->GetSprite());
     }
 }
 
 void Level::Update(sf::RenderWindow& window)
 {
+    // Accumulate time from last frame
     m_gameTime.Accumulate();
-
     while (m_gameTime.StepForward()) {
-        for (Entities::iterator eItr = m_entities.begin(); eItr != m_entities.end(); eItr++) {
-            (*eItr)->Update(window, m_gameTime.DeltaTime());
+        for (int i = 0; i < m_entities.size(); ++i) {
+            m_entities[i]->Update(window, m_gameTime.StepSize());
         }
     }
-
     Render(window);
 }
 
@@ -177,14 +173,21 @@ void Level::Spawn(const std::string& filename)
     m_entities.push_back(entity);
 }
 
-int Level::GetMaxEnemiesPerLevel()
+int Level::GetEnemyPerLevelCount()
 {
-    return m_maxEnemiesPerLevel;
+    return m_enemiesPerLevelCount;
 }
 
-int Level::GetMaxEnemiesSpawend()
+int Level::GetStartEnemyCount()
 {
-    return m_maxEnemiesSpawend;
+    return m_startEnemyCount;
+}
+
+void Level::LoadLevel(const std::string& filename) {
+    // Load level variables from lua file
+    Config levelConfig(filename);
+    m_startEnemyCount = levelConfig.GrabInteger("START_ENEMY_COUNT");
+    m_enemiesPerLevelCount = levelConfig.GrabInteger("ENEMY_PER_LEVEL_COUNT");
 }
 
 Breed* Level::GetBreed(const std::string& filename) {

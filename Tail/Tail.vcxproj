@@ -192,6 +192,7 @@
   <ItemGroup>
     <None Include="follower.lua" />
     <None Include="level.lua" />
+    <None Include="level1.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
