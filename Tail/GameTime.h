@@ -1,7 +1,6 @@
 #ifndef GAME_TIME_H
 #define GAME_TIME_H
 
-#include <SFML\Graphics.hpp>
 class Clock;
 
 // Based on the article "Fix your timestep" by Glenn Fiedler
