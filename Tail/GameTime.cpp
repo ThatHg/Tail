@@ -35,7 +35,7 @@ double GameTime::BlendFactor() {
 }
 
 void GameTime::Accumulate() {
-    double newTime = m_clock.Time();
+    double newTime = m_clock->Time();
     double delta = newTime - m_currentTime;
     // Prevent simulated system to blow up
     // by restricting delta size
