@@ -29,7 +29,7 @@ void FollowingState::Update(Enemy & enemy, sf::RenderWindow& window, double delt
 
     double speed = enemy.GetWalkingSpeed();
 
-    sf::Vector2f newPosition = lookAt * float(speed * delta);
+    sf::Vector2f newPosition = lookAt * float(speed * delta) * 10.0f;
 
     enemy.SetPosition(position + newPosition);
 }
