@@ -26,8 +26,13 @@ bool GameTime::StepForward() {
     }
 }
 
-double GameTime::DeltaTime() {
+double GameTime::StepSize() {
     return m_stepSize;
+}
+
+double GameTime::DeltaTime() {
+    double newTime = m_clock->Time();
+    return newTime - m_currentTime;
 }
 
 double GameTime::BlendFactor() {
@@ -35,12 +40,12 @@ double GameTime::BlendFactor() {
 }
 
 void GameTime::Accumulate() {
-    double newTime = m_clock->Time();
-    double delta = newTime - m_currentTime;
+    double delta = DeltaTime();
     // Prevent simulated system to blow up
     // by restricting delta size
     if (delta > 0.25) {
         delta = 0.25;
     }
     m_accumulator += delta;
+    m_currentTime = m_clock->Time();
 }
