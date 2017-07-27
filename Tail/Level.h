@@ -35,6 +35,7 @@ private:
     int m_enemiesPerLevelCount;
     int m_startEnemyCount;
     Entities m_entities;
+    Entity* m_player;
     EnemyBreeds m_breeds;
     lua_State* m_state;
     std::stack<int> m_types; // Pushes type of enemy to spawn on stack

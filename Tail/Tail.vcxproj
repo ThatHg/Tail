@@ -171,7 +171,10 @@
     <ClCompile Include="FollowingState.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="IdlingState.cpp" />
+    <ClCompile Include="KeyBinding.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerInput.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -186,11 +189,16 @@
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="IdlingState.h" />
+    <ClInclude Include="InputBase.h" />
+    <ClInclude Include="KeyBinding.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerInput.h" />
     <ClInclude Include="SFMLClockWrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="follower.lua" />
+    <None Include="key_bindings.lua" />
     <None Include="level.lua" />
     <None Include="level1.lua" />
   </ItemGroup>

@@ -3,8 +3,10 @@
 #include "Level.h"
 #include "Enemy.h"
 #include "Entity.h"
+#include "Player.h"
 #include "Helper.h"
 #include "Breed.h"
+#include "PlayerInput.h"
 #include "SFMLClockWrapper.h"
 
 using namespace std;
@@ -105,6 +107,9 @@ Level::Level(const char* filename) :
     lua_register(m_state, "spawn", lua_SpawnWrapper);
     lua_register(m_state, "get_startenemycount", lua_GetStartEnemyCountWrapper);
     lua_register(m_state, "get_typetospawn", lua_GetTypeToSpawnWrapper);
+
+    m_player = new Player(new PlayerInput());
+    m_player->SetPosition(sf::Vector2f(300,300));
 }
 
 Level::~Level()
@@ -116,6 +121,7 @@ Level::~Level()
     }
     lua_close(m_state);
     m_state = 0;
+    delete m_player;
 }
 
 void Level::Initialize()
@@ -139,8 +145,9 @@ void Level::Render(sf::RenderWindow& window)
     text.setPosition(sf::Vector2f(10.0f,10.0f));
     text.setString(ss.str());
     window.draw(text);
-
+   
     // Draw entities
+    window.draw(m_player->GetSprite());
     for (int i = 0; i < m_entities.size(); ++i)
     {
         window.draw(m_entities[i]->GetSprite());
@@ -152,6 +159,8 @@ void Level::Update(sf::RenderWindow& window)
     // Accumulate time from last frame
     m_gameTime.Accumulate();
     while (m_gameTime.StepForward()) {
+        m_player->Update(window, m_gameTime.StepSize());
+
         for (int i = 0; i < m_entities.size(); ++i) {
             m_entities[i]->Update(window, m_gameTime.StepSize());
         }

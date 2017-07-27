@@ -2,6 +2,7 @@
 #define IDLING_STATE_H
 
 #include "EnemyState.h"
+#include "Helper.h"
 
 class Enemy;
 
