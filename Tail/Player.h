@@ -9,7 +9,8 @@ class Player : public Entity {
 public:
     Player(InputBase* input);
     ~Player();
-    virtual void Update(sf::RenderWindow& window, double delta);
+    virtual void Update();
+    virtual void FixedUpdate(sf::RenderWindow& window, double delta);
 private:
     InputBase* _input;
 };

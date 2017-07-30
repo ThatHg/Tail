@@ -65,4 +65,12 @@ inline double Random(double a, double b)
     return dist(marsenneTwister);
 }
 
+inline int Max(int a, int b) {
+    return a > b ? a : b;
+}
+
+inline int Min(int a, int b) {
+    return a < b ? a : b;
+}
+
 #endif

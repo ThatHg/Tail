@@ -1,22 +1,27 @@
 #include "Entity.h"
 #include "AssetsManager.h"
+#include "Animation.h"
 
 Entity::Entity() :
     m_lookAt(sf::Vector2f(0.0f, 1.0f)),
     m_target(sf::Vector2f(640.0f, 360.0f)),
     m_position(sf::Vector2f(-900.0f, -900.0f)),
-    m_rotation(0)
+    m_rotation(0),
+    m_animation(nullptr)
 {
 }
 
 Entity::~Entity()
 {}
 
-void Entity::Update(sf::RenderWindow& window, double delta) {
+void Entity::Update() {
+}
+
+void Entity::FixedUpdate(sf::RenderWindow& window, double delta) {
 }
 
 const sf::Sprite& Entity::GetSprite() const {
-    return m_sprite;
+    return m_animation == nullptr ? m_sprite : m_animation->GetCurrentFrame();
 }
 
 const sf::Vector2f& Entity::GetLookAt() const {
@@ -53,6 +58,9 @@ void Entity::SetTarget(const sf::Vector2f& target) {
 
 void Entity::SetPosition(const sf::Vector2f& position) {
     m_sprite.setPosition(position);
+    if (m_animation != nullptr) {
+        m_animation->SetPosition(position);
+    }
     m_position = position;
 }
 

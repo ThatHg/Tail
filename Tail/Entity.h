@@ -2,12 +2,14 @@
 #define ENTITY_H
 
 #include <SFML\Graphics.hpp>
+class Animation;
 
 class Entity
 {
 public:
     virtual ~Entity();
-    virtual void Update(sf::RenderWindow& window, double delta);
+    virtual void Update();
+    virtual void FixedUpdate(sf::RenderWindow& window, double delta);
     const sf::Sprite& GetSprite() const;
     const sf::Vector2f&	GetLookAt() const;
     const sf::Vector2f& GetTarget() const;
@@ -23,6 +25,7 @@ public:
 
 protected:
     Entity();
+    Animation* m_animation;
 
 private:
     sf::Sprite m_sprite;

@@ -164,6 +164,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AssetsManager.cpp" />
     <ClCompile Include="Breed.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -178,6 +179,7 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="AssetsManager.h" />
     <ClInclude Include="Breed.h" />
     <ClInclude Include="Clock.h" />

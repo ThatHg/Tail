@@ -159,12 +159,13 @@ void Level::Update(sf::RenderWindow& window)
     // Accumulate time from last frame
     m_gameTime.Accumulate();
     while (m_gameTime.StepForward()) {
-        m_player->Update(window, m_gameTime.StepSize());
+        m_player->FixedUpdate(window, m_gameTime.StepSize());
 
         for (int i = 0; i < m_entities.size(); ++i) {
-            m_entities[i]->Update(window, m_gameTime.StepSize());
+            m_entities[i]->FixedUpdate(window, m_gameTime.StepSize());
         }
     }
+    m_player->Update();
     Render(window);
 }
 

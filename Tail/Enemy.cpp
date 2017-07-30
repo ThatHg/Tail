@@ -12,7 +12,7 @@ Enemy::Enemy(Breed & breed) :
     m_state->Enter(*this);
 }
 
-void Enemy::Update(sf::RenderWindow& window, double delta) {
+void Enemy::FixedUpdate(sf::RenderWindow& window, double delta) {
     m_state->Update(*this, window, delta);
 }
 
