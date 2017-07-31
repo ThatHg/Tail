@@ -6,7 +6,7 @@
 Enemy::Enemy(Breed & breed) :
     m_breed(breed),
     m_health(breed.GetHealth()),
-    m_state(new BoidsState()),
+    m_state(new BoidsState(100.0)),
     Entity() {
     SetSprite(sf::Sprite(AssetsManager::Ref().GetTexture(breed.GetIdlingSprite())));
     m_state->Enter(*this);

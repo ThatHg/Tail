@@ -20,6 +20,7 @@ public:
     void SetLookAt(const sf::Vector2f& lookAt);
     void SetTarget(const sf::Vector2f& target);
     void SetPosition(const sf::Vector2f& position);
+    void SetVelocity(const sf::Vector2f& velocity);
     void SetRotation(const float rotation);
 
 protected:

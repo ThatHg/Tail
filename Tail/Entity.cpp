@@ -49,6 +49,10 @@ void Entity::SetPosition(const sf::Vector2f& position) {
     m_transform.SetPosition(position);
 }
 
+void Entity::SetVelocity(const sf::Vector2f& velocity) {
+    m_transform.SetVelocity(velocity);
+}
+
 void Entity::SetRotation(const float rotation) {
     m_sprite.setRotation(rotation);
     m_transform.SetRotation(rotation);
