@@ -17,7 +17,7 @@ Entity::~Entity()
 void Entity::Update() {
 }
 
-void Entity::FixedUpdate(sf::RenderWindow& window, double delta) {
+void Entity::FixedUpdate(sf::RenderWindow& window, double delta, const Level& level) {
 }
 
 const sf::Sprite& Entity::GetSprite() const {

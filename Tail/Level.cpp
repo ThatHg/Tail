@@ -159,10 +159,10 @@ void Level::Update(sf::RenderWindow& window)
     // Accumulate time from last frame
     m_gameTime.Accumulate();
     while (m_gameTime.StepForward()) {
-        m_player->FixedUpdate(window, m_gameTime.StepSize());
+        m_player->FixedUpdate(window, m_gameTime.StepSize(), *this);
 
         for (int i = 0; i < m_entities.size(); ++i) {
-            m_entities[i]->FixedUpdate(window, m_gameTime.StepSize());
+            m_entities[i]->FixedUpdate(window, m_gameTime.StepSize(), *this);
         }
     }
     m_player->Update();
@@ -191,6 +191,19 @@ int Level::GetEnemyPerLevelCount()
 int Level::GetStartEnemyCount()
 {
     return m_startEnemyCount;
+}
+
+Level::Entities Level::GetEnemiesInsideRadius(sf::Vector2f position, double radius) {
+    Entities inside_entities;
+    for (int i = 0; i < m_entities.size(); ++i) {
+        auto e = m_entities[i];
+        sf::Vector2f pos = e->GetPosition();
+        double len = Length(pos - position);
+        if (len <= radius) {
+            inside_entities.push_back(e);
+        }
+    }
+    return inside_entities;
 }
 
 void Level::LoadLevel(const std::string& filename) {

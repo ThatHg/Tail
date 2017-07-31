@@ -3,13 +3,14 @@
 
 #include <SFML\Graphics.hpp>
 class Animation;
+class Level;
 
 class Entity
 {
 public:
     virtual ~Entity();
     virtual void Update();
-    virtual void FixedUpdate(sf::RenderWindow& window, double delta);
+    virtual void FixedUpdate(sf::RenderWindow& window, double delta, const Level& level);
     const sf::Sprite& GetSprite() const;
     const sf::Vector2f&	GetLookAt() const;
     const sf::Vector2f& GetTarget() const;

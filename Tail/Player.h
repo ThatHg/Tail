@@ -10,7 +10,7 @@ public:
     Player(InputBase* input);
     ~Player();
     virtual void Update();
-    virtual void FixedUpdate(sf::RenderWindow& window, double delta);
+    virtual void FixedUpdate(sf::RenderWindow& window, double delta, const Level& level);
 private:
     InputBase* _input;
 };

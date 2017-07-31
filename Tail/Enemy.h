@@ -10,7 +10,7 @@ class RenderWindow;
 class Enemy : public Entity {
     friend class Breed;
 public:
-    virtual void FixedUpdate(sf::RenderWindow& window, double delta);
+    virtual void FixedUpdate(sf::RenderWindow& window, double delta, const Level& level);
     virtual void HandleCommand(Command command);
 
     const bool IsAlive() const;

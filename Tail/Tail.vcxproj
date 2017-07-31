@@ -166,6 +166,7 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AssetsManager.cpp" />
+    <ClCompile Include="BoidsState.cpp" />
     <ClCompile Include="Breed.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -181,6 +182,7 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AssetsManager.h" />
+    <ClInclude Include="BoidsState.h" />
     <ClInclude Include="Breed.h" />
     <ClInclude Include="Clock.h" />
     <ClInclude Include="Config.h" />

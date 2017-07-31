@@ -73,4 +73,8 @@ inline int Min(int a, int b) {
     return a < b ? a : b;
 }
 
+inline int Clamp(int v, int min, int max) {
+    return Max(min, Min(v, max));
+}
+
 #endif

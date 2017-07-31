@@ -12,8 +12,8 @@ Enemy::Enemy(Breed & breed) :
     m_state->Enter(*this);
 }
 
-void Enemy::FixedUpdate(sf::RenderWindow& window, double delta) {
-    m_state->Update(*this, window, delta);
+void Enemy::FixedUpdate(sf::RenderWindow& window, double delta, const Level& level) {
+    m_state->Update(*this, window, delta, level);
 }
 
 void Enemy::HandleCommand(Command command) {

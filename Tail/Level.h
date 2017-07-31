@@ -15,6 +15,9 @@ class Breed;
 class Level
 {
 public:
+    typedef std::vector<Entity*> Entities;
+    typedef std::map<std::string, Breed*> EnemyBreeds;
+
     Level(const char* filename);
     ~Level();
 
@@ -24,9 +27,9 @@ public:
     int GetTypeToSpawn();
     int GetEnemyPerLevelCount();
     int GetStartEnemyCount();
+    Entities GetEnemiesInsideRadius(sf::Vector2f position, double radius);
 private:
-    typedef std::vector<Entity*> Entities;
-    typedef std::map<std::string, Breed*> EnemyBreeds;
+    
 
     Breed* GetBreed(const std::string& filename);
     void LoadLevel(const std::string& filename);
