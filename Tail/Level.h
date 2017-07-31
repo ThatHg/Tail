@@ -11,6 +11,7 @@
 
 class Entity;
 class Breed;
+class TransformComponent;
 
 class Level
 {
@@ -27,7 +28,7 @@ public:
     int GetTypeToSpawn();
     int GetEnemyPerLevelCount();
     int GetStartEnemyCount();
-    Entities GetEnemiesInsideRadius(sf::Vector2f position, double radius);
+    const Entities& GetEntities() const { return m_entities; }
 private:
     
 

@@ -32,5 +32,5 @@ void PlayerInput::Update(Entity & entity, double delta) {
     }
     Normalize(move_dir);
     
-    entity.SetPosition(entity.GetPosition() + move_dir * (float)delta * 500.0f);
+    entity.SetPosition(entity.GetTransform().Position() + move_dir * (float)delta * 500.0f);
 }

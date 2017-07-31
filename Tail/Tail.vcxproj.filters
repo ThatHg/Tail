@@ -116,6 +116,9 @@
     <ClInclude Include="BoidsState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TransformComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="level.lua">

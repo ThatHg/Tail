@@ -3,10 +3,7 @@
 #include "Animation.h"
 
 Entity::Entity() :
-    m_lookAt(sf::Vector2f(0.0f, 1.0f)),
-    m_target(sf::Vector2f(640.0f, 360.0f)),
-    m_position(sf::Vector2f(-900.0f, -900.0f)),
-    m_rotation(0),
+    m_transform(TransformComponent()),
     m_animation(nullptr)
 {
 }
@@ -24,20 +21,8 @@ const sf::Sprite& Entity::GetSprite() const {
     return m_animation == nullptr ? m_sprite : m_animation->GetCurrentFrame();
 }
 
-const sf::Vector2f& Entity::GetLookAt() const {
-    return m_lookAt;
-}
-
-const sf::Vector2f& Entity::GetTarget() const {
-    return m_target;
-}
-
-const sf::Vector2f&	Entity::GetPosition() const {
-    return m_position;
-}
-
-const float Entity::GetRotation() const {
-    return m_rotation;
+const TransformComponent & Entity::GetTransform() const {
+    return m_transform;
 }
 
 void Entity::SetSprite(const std::string& spriteName) {
@@ -49,11 +34,11 @@ void Entity::SetSprite(const sf::Sprite& sprite) {
 }
 
 void Entity::SetLookAt(const sf::Vector2f& lookAt) {
-    m_lookAt = lookAt;
+    m_transform.SetLookAt(lookAt);
 }
 
 void Entity::SetTarget(const sf::Vector2f& target) {
-    m_target = target;
+    m_transform.SetTarget(target);
 }
 
 void Entity::SetPosition(const sf::Vector2f& position) {
@@ -61,10 +46,10 @@ void Entity::SetPosition(const sf::Vector2f& position) {
     if (m_animation != nullptr) {
         m_animation->SetPosition(position);
     }
-    m_position = position;
+    m_transform.SetPosition(position);
 }
 
 void Entity::SetRotation(const float rotation) {
     m_sprite.setRotation(rotation);
-    m_rotation = rotation;
+    m_transform.SetRotation(rotation);
 }

@@ -1,12 +1,12 @@
 #include "Enemy.h"
 #include "Breed.h"
 #include "AssetsManager.h"
-#include "FollowingState.h"
+#include "BoidsState.h"
 
 Enemy::Enemy(Breed & breed) :
     m_breed(breed),
     m_health(breed.GetHealth()),
-    m_state(new FollowingState()),
+    m_state(new BoidsState()),
     Entity() {
     SetSprite(sf::Sprite(AssetsManager::Ref().GetTexture(breed.GetIdlingSprite())));
     m_state->Enter(*this);

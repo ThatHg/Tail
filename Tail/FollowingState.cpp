@@ -14,11 +14,11 @@ EnemyState* FollowingState::HandleCommand(Command command) {
 void FollowingState::Update(Enemy & enemy, sf::RenderWindow& window, double delta, const Level& level) {
     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
     sf::Vector2f target((float)mousePosition.x, (float)mousePosition.y);
-    sf::Vector2f position = enemy.GetPosition();
+    sf::Vector2f position = enemy.GetTransform().Position();
 
     enemy.SetTarget(target);
 
-    double rotation = RotationDeg2D(enemy.GetPosition(), enemy.GetTarget());
+    double rotation = RotationDeg2D(position, target);
     if (rotation >= 360 || rotation < 0)
         rotation = 0;
 

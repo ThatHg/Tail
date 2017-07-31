@@ -2,6 +2,7 @@
 #define ENTITY_H
 
 #include <SFML\Graphics.hpp>
+#include "TransformComponent.h"
 class Animation;
 class Level;
 
@@ -12,10 +13,7 @@ public:
     virtual void Update();
     virtual void FixedUpdate(sf::RenderWindow& window, double delta, const Level& level);
     const sf::Sprite& GetSprite() const;
-    const sf::Vector2f&	GetLookAt() const;
-    const sf::Vector2f& GetTarget() const;
-    const sf::Vector2f&	GetPosition() const;
-    const float GetRotation() const;
+    const TransformComponent& GetTransform() const;
 
     void SetSprite(const std::string& spriteName);
     void SetSprite(const sf::Sprite& sprite);
@@ -30,9 +28,6 @@ protected:
 
 private:
     sf::Sprite m_sprite;
-    sf::Vector2f m_lookAt;
-    sf::Vector2f m_target;
-    sf::Vector2f m_position;
-    float m_rotation;
+    TransformComponent m_transform;
 };
 #endif

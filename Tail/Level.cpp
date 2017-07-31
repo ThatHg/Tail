@@ -8,6 +8,7 @@
 #include "Breed.h"
 #include "PlayerInput.h"
 #include "SFMLClockWrapper.h"
+#include "TransformComponent.h"
 
 using namespace std;
 
@@ -191,19 +192,6 @@ int Level::GetEnemyPerLevelCount()
 int Level::GetStartEnemyCount()
 {
     return m_startEnemyCount;
-}
-
-Level::Entities Level::GetEnemiesInsideRadius(sf::Vector2f position, double radius) {
-    Entities inside_entities;
-    for (int i = 0; i < m_entities.size(); ++i) {
-        auto e = m_entities[i];
-        sf::Vector2f pos = e->GetPosition();
-        double len = Length(pos - position);
-        if (len <= radius) {
-            inside_entities.push_back(e);
-        }
-    }
-    return inside_entities;
 }
 
 void Level::LoadLevel(const std::string& filename) {
