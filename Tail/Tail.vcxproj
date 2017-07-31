@@ -168,6 +168,8 @@
     <ClCompile Include="AssetsManager.cpp" />
     <ClCompile Include="BoidsState.cpp" />
     <ClCompile Include="Breed.cpp" />
+    <ClCompile Include="Components\PhysicsComponent.cpp" />
+    <ClCompile Include="Components\PlayerInputComponent.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="FollowingState.cpp" />
@@ -176,7 +178,6 @@
     <ClCompile Include="KeyBinding.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayerInput.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -185,6 +186,10 @@
     <ClInclude Include="BoidsState.h" />
     <ClInclude Include="Breed.h" />
     <ClInclude Include="Clock.h" />
+    <ClInclude Include="Components\Component.h" />
+    <ClInclude Include="Components\PhysicsComponent.h" />
+    <ClInclude Include="Components\PlayerInputComponent.h" />
+    <ClInclude Include="Components\Transform.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyState.h" />
@@ -193,13 +198,10 @@
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="IdlingState.h" />
-    <ClInclude Include="InputBase.h" />
     <ClInclude Include="KeyBinding.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayerInput.h" />
     <ClInclude Include="SFMLClockWrapper.h" />
-    <ClInclude Include="TransformComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="follower.lua" />

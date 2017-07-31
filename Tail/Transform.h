@@ -1,11 +1,11 @@
-#ifndef TRANSFORM_COMPONENT_H
-#define TRANSFORM_COMPONENT_H
+#ifndef TRANSFORM_H
+#define TRANSFORM_H
 
 #include <SFML\Graphics\Vertex.hpp>
 
-class TransformComponent {
+class Transform  {
 public:
-    TransformComponent() :
+    Transform() :
         m_lookAt(sf::Vector2f(0.0f, 0.0f)),
         m_target(sf::Vector2f(0.0f, 0.0f)),
         m_position(sf::Vector2f(0.0f, 0.0f)),
@@ -13,7 +13,7 @@ public:
         m_rotation(0){
     }
 
-    TransformComponent(const TransformComponent& t) {
+    Transform(const Transform& t) {
         if (this != &t) {
             m_lookAt = t.LookAt();
             m_position = t.Position();
@@ -23,7 +23,7 @@ public:
         }
     }
 
-    TransformComponent& operator=(TransformComponent& t) {
+    Transform& operator=(Transform& t) {
         if (this != &t) {
             m_lookAt = t.LookAt();
             m_position = t.Position();
@@ -55,4 +55,4 @@ private:
     float m_rotation;
 };
 
-#endif // !TRANSFORM_COMPONENT_H
+#endif // !TRANSFORM_H

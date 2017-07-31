@@ -6,9 +6,10 @@
 #include "Player.h"
 #include "Helper.h"
 #include "Breed.h"
-#include "PlayerInput.h"
 #include "SFMLClockWrapper.h"
-#include "TransformComponent.h"
+#include "Transform.h"
+#include "Components\PhysicsComponent.h"
+#include "Components\PlayerInputComponent.h"
 
 using namespace std;
 
@@ -109,7 +110,10 @@ Level::Level(const char* filename) :
     lua_register(m_state, "get_startenemycount", lua_GetStartEnemyCountWrapper);
     lua_register(m_state, "get_typetospawn", lua_GetTypeToSpawnWrapper);
 
-    m_player = new Player(new PlayerInput());
+    m_player = new Player();
+    m_player->AddComponent<PlayerInputComponent>();
+    auto c = m_player->AddComponent<PhysicsComponent>();
+    c->EnableGravity(true);
     m_player->SetPosition(sf::Vector2f(300,300));
 }
 

@@ -1,27 +1,39 @@
 #include "Entity.h"
 #include "AssetsManager.h"
 #include "Animation.h"
+#include "Components\Component.h"
 
 Entity::Entity() :
-    m_transform(TransformComponent()),
-    m_animation(nullptr)
-{
+    m_transform(Transform()),
+    m_animation(nullptr){
 }
 
-Entity::~Entity()
-{}
+Entity::~Entity(){
+    std::map<size_t, Component*>::iterator itr;
+    for (itr = m_components.begin(); itr != m_components.end(); itr++) {
+        delete itr->second;
+    }
+}
 
 void Entity::Update() {
+    std::map<size_t, Component*>::iterator itr;
+    for (itr = m_components.begin(); itr != m_components.end(); itr++) {
+        itr->second->Update();
+    }
 }
 
 void Entity::FixedUpdate(sf::RenderWindow& window, double delta, const Level& level) {
+    std::map<size_t, Component*>::iterator itr;
+    for (itr = m_components.begin(); itr != m_components.end(); itr++) {
+        itr->second->FixedUpdate(window, delta, level);
+    }
 }
 
 const sf::Sprite& Entity::GetSprite() const {
     return m_animation == nullptr ? m_sprite : m_animation->GetCurrentFrame();
 }
 
-const TransformComponent & Entity::GetTransform() const {
+const Transform & Entity::GetTransform() const {
     return m_transform;
 }
 
@@ -56,4 +68,9 @@ void Entity::SetVelocity(const sf::Vector2f& velocity) {
 void Entity::SetRotation(const float rotation) {
     m_sprite.setRotation(rotation);
     m_transform.SetRotation(rotation);
+}
+
+void Entity::AddComponent(std::size_t key, Component* component) {
+    m_components[key] = component;
+    component->SetEntity(this);
 }

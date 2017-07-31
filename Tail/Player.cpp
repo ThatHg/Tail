@@ -1,11 +1,8 @@
 #include "Player.h"
-#include "InputBase.h"
 #include "Animation.h"
 
-Player::Player(InputBase* input) :
-    _input(input){
+Player::Player() {
     this->SetSprite("player.png");
-
     AnimationSheetInfo info;
     info.m_frame_count = 8;
     info.m_frame_height = 64;
@@ -15,14 +12,15 @@ Player::Player(InputBase* input) :
 }
 
 Player::~Player() {
-    delete _input;
+    //delete _input;
     delete m_animation;
 }
 
 void Player::Update() {
+    Entity::Update();
     m_animation->Update();
 }
 
 void Player::FixedUpdate(sf::RenderWindow & window, double delta, const Level& level) {
-    _input->Update(*this, delta);
+    Entity::FixedUpdate(window, delta, level);
 }

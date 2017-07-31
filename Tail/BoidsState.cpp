@@ -1,7 +1,7 @@
 #include "BoidsState.h"
 #include "IdlingState.h"
 #include "Enemy.h"
-#include "TransformComponent.h"
+#include "Transform.h"
 #include "Helper.h"
 
 BoidsState::BoidsState(double distance) :
@@ -21,7 +21,7 @@ sf::Vector2f BoidsState::Rule1(Level::Entities& e, Entity& enemy) {
     int flock_size = 0;
     for (int i = 0; i < e.size(); ++i) {
         if (e[i] != &enemy) {
-            TransformComponent t = e[i]->GetTransform();
+            Transform t = e[i]->GetTransform();
             if (Length(t.Position() - enemy.GetTransform().Position()) <= m_distance) {
                 center_of_mass += t.Position();
                 flock_size++;
@@ -38,7 +38,7 @@ sf::Vector2f BoidsState::Rule2(Level::Entities& e, Entity& enemy) {
     sf::Vector2f displacement(0.0f, 0.0f);
     for (int i = 0; i < e.size(); ++i) {
         if (e[i] != &enemy) {
-            TransformComponent t = e[i]->GetTransform();
+            Transform t = e[i]->GetTransform();
             if (Length(t.Position() - enemy.GetTransform().Position()) < 32) {
                 displacement = displacement - (t.Position() - enemy.GetTransform().Position());
             }
@@ -52,7 +52,7 @@ sf::Vector2f BoidsState::Rule3(Level::Entities& e, Entity& enemy) {
     int flock_size = 0;
     for (int i = 0; i < e.size(); ++i) {
         if (e[i] != &enemy) {
-            TransformComponent t = e[i]->GetTransform();
+            Transform t = e[i]->GetTransform();
             if (Length(t.Position() - enemy.GetTransform().Position()) <= m_distance) {
                 velocity += t.Velocity();
                 flock_size++;
