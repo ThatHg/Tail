@@ -29,9 +29,8 @@ public:
     int GetEnemyPerLevelCount();
     int GetStartEnemyCount();
     const Entities& GetEntities() const { return m_entities; }
+    const Entity& GetPlayer() const { return *m_player; }
 private:
-    
-
     Breed* GetBreed(const std::string& filename);
     void LoadLevel(const std::string& filename);
     void Render(sf::RenderWindow& window);

@@ -83,11 +83,22 @@ sf::Vector2f BoidsState::Rule4(Enemy & enemy, sf::RenderWindow & window) {
     return v * encouragement;
 }
 
-void LimitVelocity(sf::Vector2f& v) {
+sf::Vector2f BoidsState::Rule5(Enemy & enemy, const Level & level) {
+    auto player_dir = level.GetPlayer().GetTransform().Position() - enemy.GetTransform().Position();
+    double len = Length(player_dir);
+    if (len < 200) {
+        return player_dir * -(float)(200 - len);
+    }
+    else {
+        return sf::Vector2f(0.0f, 0.0f);
+    }
+}
+
+void LimitVelocity(Enemy & enemy, sf::Vector2f& v) {
     double l = Length(v);
     float inv = (float)(l == 0.0 ? 1 : 1.0 / l);
-    if (l > 100.0f) {
-        v = (v * inv) * 100.0f;
+    if (l > enemy.GetWalkingSpeed()) {
+        v = (v * inv) * (float)enemy.GetWalkingSpeed();
     }
 }
 
@@ -97,10 +108,11 @@ void BoidsState::Update(Enemy & enemy, sf::RenderWindow & window, double delta, 
     auto v2 = Rule2(e, enemy);
     auto v3 = Rule3(e, enemy);
     auto v4 = Rule4(enemy, window);
+    auto v5 = Rule5(enemy, level);
 
-    auto v = enemy.GetTransform().Velocity() + v1 + v2 + v3 + v4;
+    auto v = enemy.GetTransform().Velocity() + v1 + v2 + v3 + v4 + v5;
 
-    LimitVelocity(v);
+    LimitVelocity(enemy, v);
 
     enemy.SetVelocity(v);
     enemy.SetPosition(enemy.GetTransform().Position() + enemy.GetTransform().Velocity() * (float)delta);
