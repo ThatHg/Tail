@@ -12,16 +12,16 @@ PhysicsComponent::~PhysicsComponent() {
 void PhysicsComponent::Update() {
 }
 
-void PhysicsComponent::FixedUpdate(sf::RenderWindow& window, double delta, const Level& level) {
+void PhysicsComponent::FixedUpdate(sf::RenderWindow&, float delta, const Level&) {
     if (m_gravity_enabled) {
         AddForce(sf::Vector2f(0, 1), false);
     }
     Transform t = m_entity->GetTransform();
-    m_entity->SetPosition(t.Position() + m_velocity * (float)delta);
+    m_entity->SetPosition(t.Position() + m_velocity * delta);
 }
 
 void PhysicsComponent::EnableGravity(bool enabled) {
-    m_gravity_enabled = true;
+    m_gravity_enabled = enabled;
 }
 
 void PhysicsComponent::AddForce(const sf::Vector2f & force, bool is_impulse) {

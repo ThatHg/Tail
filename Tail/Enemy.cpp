@@ -12,7 +12,7 @@ Enemy::Enemy(Breed & breed) :
     m_state->Enter(*this);
 }
 
-void Enemy::FixedUpdate(sf::RenderWindow& window, double delta, const Level& level) {
+void Enemy::FixedUpdate(sf::RenderWindow& window, float delta, const Level& level) {
     m_state->Update(*this, window, delta, level);
 }
 
@@ -30,11 +30,11 @@ const bool Enemy::IsAlive() const {
     return m_health > 0.0;
 }
 
-const double Enemy::GetHealth() const {
+const float Enemy::GetHealth() const {
     return m_health;
 }
 
-const double Enemy::GetWalkingSpeed() const {
+const float Enemy::GetWalkingSpeed() const {
     return m_breed.GetWalkingSpeed();
 }
 

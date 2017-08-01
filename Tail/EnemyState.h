@@ -21,7 +21,7 @@ class EnemyState {
 public:
     virtual ~EnemyState() {};
     virtual EnemyState* HandleCommand(Command command) = 0;
-    virtual void Update(Enemy& enemy, sf::RenderWindow& window, double delta, const Level& level) = 0;
+    virtual void Update(Enemy& enemy, sf::RenderWindow& window, float delta, const Level& level) = 0;
     virtual void Enter(Enemy& enemy) = 0;
 };
 

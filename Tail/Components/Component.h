@@ -11,7 +11,7 @@ class Component {
 public:
     virtual ~Component() {}
     virtual void Update() = 0;
-    virtual void FixedUpdate(sf::RenderWindow& window, double delta, const Level& level) = 0;
+    virtual void FixedUpdate(sf::RenderWindow& window, float delta, const Level& level) = 0;
     void SetEntity(Entity* entity) { m_entity = entity; };
     Entity* GetEntity() const { return m_entity; }
 protected:

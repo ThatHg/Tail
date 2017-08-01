@@ -8,14 +8,14 @@
 #define PI (3.141592653589793)
 
 
-inline double Length(sf::Vector2f vector)
+inline float Length(sf::Vector2f vector)
 {
     return std::sqrt((vector.x * vector.x) + (vector.y * vector.y));
 }
 
 inline void Normalize(sf::Vector2f& vector)
 {
-    double length = Length(vector);
+    float length = Length(vector);
     if(length != 0)
     {
         vector.x = vector.x/float(length);
@@ -42,7 +42,7 @@ inline float RotationDeg2D(const sf::Vector2f& from, const sf::Vector2f to)
     return degree;
 }
 
-inline double RotationRad2D(sf::Vector2f from, sf::Vector2f to)
+inline float RotationRad2D(sf::Vector2f from, sf::Vector2f to)
 {
     float dx = to.x - from.x;
     float dy = to.y - from.y;
@@ -56,13 +56,13 @@ inline double RotationRad2D(sf::Vector2f from, sf::Vector2f to)
     return radian_aTob;
 }
 
-inline double Random(double a, double b)
+inline float Random(float a, float b)
 {
     std::random_device randomDevice;
     std::mt19937 marsenneTwister(randomDevice());
     std::uniform_real_distribution<> dist(a, b);
 
-    return dist(marsenneTwister);
+    return (float)dist(marsenneTwister);
 }
 
 inline int Max(int a, int b) {

@@ -153,7 +153,7 @@ void Level::Render(sf::RenderWindow& window)
    
     // Draw entities
     window.draw(m_player->GetSprite());
-    for (int i = 0; i < m_entities.size(); ++i)
+    for (size_t i = 0; i < m_entities.size(); ++i)
     {
         window.draw(m_entities[i]->GetSprite());
     }
@@ -163,11 +163,12 @@ void Level::Update(sf::RenderWindow& window)
 {
     // Accumulate time from last frame
     m_gameTime.Accumulate();
+    float sim_step_size = (float)m_gameTime.StepSize();
     while (m_gameTime.StepForward()) {
-        m_player->FixedUpdate(window, m_gameTime.StepSize(), *this);
+        m_player->FixedUpdate(window, sim_step_size, *this);
 
-        for (int i = 0; i < m_entities.size(); ++i) {
-            m_entities[i]->FixedUpdate(window, m_gameTime.StepSize(), *this);
+        for (size_t i = 0; i < m_entities.size(); ++i) {
+            m_entities[i]->FixedUpdate(window, sim_step_size, *this);
         }
     }
     m_player->Update();
@@ -182,8 +183,8 @@ void Level::Spawn(const std::string& filename)
     Entity* entity = breed->NewEnemy();
     entity->SetPosition(
         sf::Vector2f(
-            (float)Random(0, 1280), 
-            (float)Random(0, 720)));
+            Random(0, 1280), 
+            Random(0, 720)));
 
     m_entities.push_back(entity);
 }
@@ -213,8 +214,8 @@ Breed* Level::GetBreed(const std::string& filename) {
     else {
         // Load enemy variables from lua file
         Config enemyConfig(filename);
-        double health = enemyConfig.GrabReal("HEALTH");
-        double walkingSpeed = enemyConfig.GrabReal("WALKING_SPEED");
+        float health = (float)enemyConfig.GrabReal("HEALTH");
+        float walkingSpeed = (float)enemyConfig.GrabReal("WALKING_SPEED");
         const char* followingSprite = enemyConfig.GrabString("FOLLOWING_SPRITE");
         const char* idlingSprite = enemyConfig.GrabString("IDLING_SPRITE");
 

@@ -49,5 +49,5 @@ void PlayerInputComponent::Update() {
     }
 }
 
-void PlayerInputComponent::FixedUpdate(sf::RenderWindow & window, double delta, const Level & level) {
+void PlayerInputComponent::FixedUpdate(sf::RenderWindow &, float, const Level &) {
 }

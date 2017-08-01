@@ -1,7 +1,7 @@
 #include "Breed.h"
 #include "Enemy.h"
 
-Breed::Breed(double health, double walkingSpeed, const std::string& idlingSprite, const std::string& followingSprite) :
+Breed::Breed(float health, float walkingSpeed, const std::string& idlingSprite, const std::string& followingSprite) :
     m_health(health),
     m_walkingSpeed(walkingSpeed),
     m_idlingSprite(idlingSprite),
@@ -12,11 +12,11 @@ Enemy * Breed::NewEnemy() {
     return new Enemy(*this);
 }
 
-double Breed::GetWalkingSpeed() {
+float Breed::GetWalkingSpeed() {
     return m_walkingSpeed;
 }
 
-double Breed::GetHealth() {
+float Breed::GetHealth() {
     return m_health;
 }
 

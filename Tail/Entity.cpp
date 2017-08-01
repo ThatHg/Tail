@@ -22,7 +22,7 @@ void Entity::Update() {
     }
 }
 
-void Entity::FixedUpdate(sf::RenderWindow& window, double delta, const Level& level) {
+void Entity::FixedUpdate(sf::RenderWindow& window, float delta, const Level& level) {
     std::map<size_t, Component*>::iterator itr;
     for (itr = m_components.begin(); itr != m_components.end(); itr++) {
         itr->second->FixedUpdate(window, delta, level);

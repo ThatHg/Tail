@@ -13,7 +13,7 @@ class Entity
 public:
     virtual ~Entity();
     virtual void Update();
-    virtual void FixedUpdate(sf::RenderWindow& window, double delta, const Level& level);
+    virtual void FixedUpdate(sf::RenderWindow& window, float delta, const Level& level);
     const sf::Sprite& GetSprite() const;
     const Transform& GetTransform() const;
 

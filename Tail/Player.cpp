@@ -21,6 +21,6 @@ void Player::Update() {
     m_animation->Update();
 }
 
-void Player::FixedUpdate(sf::RenderWindow & window, double delta, const Level& level) {
+void Player::FixedUpdate(sf::RenderWindow & window, float delta, const Level& level) {
     Entity::FixedUpdate(window, delta, level);
 }

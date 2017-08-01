@@ -4,7 +4,7 @@
 #include "Transform.h"
 #include "Helper.h"
 
-BoidsState::BoidsState(double distance) :
+BoidsState::BoidsState(float distance) :
 m_distance(distance){
 
 }
@@ -19,7 +19,7 @@ EnemyState * BoidsState::HandleCommand(Command command) {
 sf::Vector2f BoidsState::Rule1(Level::Entities& e, Entity& enemy) {
     sf::Vector2f center_of_mass(0.0f, 0.0f);
     int flock_size = 0;
-    for (int i = 0; i < e.size(); ++i) {
+    for (size_t i = 0; i < e.size(); ++i) {
         if (e[i] != &enemy) {
             Transform t = e[i]->GetTransform();
             if (Length(t.Position() - enemy.GetTransform().Position()) <= m_distance) {
@@ -36,7 +36,7 @@ sf::Vector2f BoidsState::Rule1(Level::Entities& e, Entity& enemy) {
 
 sf::Vector2f BoidsState::Rule2(Level::Entities& e, Entity& enemy) {
     sf::Vector2f displacement(0.0f, 0.0f);
-    for (int i = 0; i < e.size(); ++i) {
+    for (size_t i = 0; i < e.size(); ++i) {
         if (e[i] != &enemy) {
             Transform t = e[i]->GetTransform();
             if (Length(t.Position() - enemy.GetTransform().Position()) < 32) {
@@ -50,7 +50,7 @@ sf::Vector2f BoidsState::Rule2(Level::Entities& e, Entity& enemy) {
 sf::Vector2f BoidsState::Rule3(Level::Entities& e, Entity& enemy) {
     sf::Vector2f velocity(0.0f, 0.0f);
     int flock_size = 0;
-    for (int i = 0; i < e.size(); ++i) {
+    for (size_t i = 0; i < e.size(); ++i) {
         if (e[i] != &enemy) {
             Transform t = e[i]->GetTransform();
             if (Length(t.Position() - enemy.GetTransform().Position()) <= m_distance) {
@@ -85,9 +85,9 @@ sf::Vector2f BoidsState::Rule4(Enemy & enemy, sf::RenderWindow & window) {
 
 sf::Vector2f BoidsState::Rule5(Enemy & enemy, const Level & level) {
     auto player_dir = level.GetPlayer().GetTransform().Position() - enemy.GetTransform().Position();
-    double len = Length(player_dir);
+    float len = Length(player_dir);
     if (len < 200) {
-        return player_dir * -(float)(200 - len);
+        return player_dir * -(200.0f - len);
     }
     else {
         return sf::Vector2f(0.0f, 0.0f);
@@ -95,14 +95,14 @@ sf::Vector2f BoidsState::Rule5(Enemy & enemy, const Level & level) {
 }
 
 void LimitVelocity(Enemy & enemy, sf::Vector2f& v) {
-    double l = Length(v);
-    float inv = (float)(l == 0.0 ? 1 : 1.0 / l);
+    float l = Length(v);
+    float inv = l == 0.0f ? 1.0f : 1.0f / l;
     if (l > enemy.GetWalkingSpeed()) {
-        v = (v * inv) * (float)enemy.GetWalkingSpeed();
+        v = v * inv * enemy.GetWalkingSpeed();
     }
 }
 
-void BoidsState::Update(Enemy & enemy, sf::RenderWindow & window, double delta, const Level & level) {
+void BoidsState::Update(Enemy & enemy, sf::RenderWindow & window, float delta, const Level & level) {
     auto e = level.GetEntities();
     auto v1 = Rule1(e, enemy);
     auto v2 = Rule2(e, enemy);
@@ -115,13 +115,14 @@ void BoidsState::Update(Enemy & enemy, sf::RenderWindow & window, double delta, 
     LimitVelocity(enemy, v);
 
     enemy.SetVelocity(v);
-    enemy.SetPosition(enemy.GetTransform().Position() + enemy.GetTransform().Velocity() * (float)delta);
-    double rotation = RotationDeg2D(enemy.GetTransform().Position(), enemy.GetTransform().Position() + enemy.GetTransform().Velocity());
+    enemy.SetPosition(enemy.GetTransform().Position() + enemy.GetTransform().Velocity() * delta);
+    float rotation = RotationDeg2D(enemy.GetTransform().Position(), enemy.GetTransform().Position() + enemy.GetTransform().Velocity());
     if (rotation >= 360 || rotation < 0)
         rotation = 0;
 
-    enemy.SetRotation((float)rotation);
+    enemy.SetRotation(rotation);
 }
 
 void BoidsState::Enter(Enemy & enemy) {
+    enemy.SetSprite(enemy.GetFollowingSprite());
 }

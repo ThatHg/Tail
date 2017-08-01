@@ -6,7 +6,7 @@
 class FollowingState : public EnemyState {
 public:
     virtual EnemyState* HandleCommand(Command command);
-    virtual void Update(Enemy& enemy, sf::RenderWindow& window, double delta, const Level& level);
+    virtual void Update(Enemy& enemy, sf::RenderWindow& window, float delta, const Level& level);
     virtual void Enter(Enemy& enemy);
 };
 

@@ -16,7 +16,7 @@ EnemyState* IdlingState::HandleCommand(Command command) {
     return NULL;
 }
 
-void IdlingState::Update(Enemy & enemy, sf::RenderWindow& window, double delta, const Level& level) {
+void IdlingState::Update(Enemy & enemy, sf::RenderWindow&, float, const Level&) {
     enemy.SetRotation(6);
 }
 

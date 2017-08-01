@@ -9,7 +9,7 @@ public:
     PlayerInputComponent();
     ~PlayerInputComponent();
     virtual void Update();
-    virtual void FixedUpdate(sf::RenderWindow& window, double delta, const Level& level);
+    virtual void FixedUpdate(sf::RenderWindow& window, float delta, const Level& level);
 private:
     KeyBinding m_key_bindings;
 };

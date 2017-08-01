@@ -6,9 +6,9 @@
 
 class BoidsState : public EnemyState {
 public:
-    BoidsState(double distance);
+    BoidsState(float distance);
     virtual EnemyState* HandleCommand(Command command);
-    virtual void Update(Enemy& enemy, sf::RenderWindow& window, double delta, const Level& level);
+    virtual void Update(Enemy& enemy, sf::RenderWindow& window, float delta, const Level& level);
     virtual void Enter(Enemy& enemy);
 
 private:
@@ -17,7 +17,7 @@ private:
     sf::Vector2f Rule3(Level::Entities& e, Entity& enemy);
     sf::Vector2f Rule4(Enemy & enemy, sf::RenderWindow & window);
     sf::Vector2f Rule5(Enemy & enemy, const Level & level);
-    double m_distance;
+    float m_distance;
 };
 
 #endif // !BOIDS_STATE_H

@@ -7,16 +7,16 @@ class Enemy;
 
 class Breed {
 public:
-    Breed(double health, double walkingSpeed, const std::string& idlingSprite, const std::string& followingSprite);
+    Breed(float health, float walkingSpeed, const std::string& idlingSprite, const std::string& followingSprite);
     Enemy* NewEnemy();
 
-    double GetWalkingSpeed();
-    double GetHealth();
+    float GetWalkingSpeed();
+    float GetHealth();
     const std::string& GetFollowingSprite() const;
     const std::string& GetIdlingSprite() const;
 private:
-    double m_health;
-    double m_walkingSpeed;
+    float m_health;
+    float m_walkingSpeed;
     const std::string m_idlingSprite;
     const std::string m_followingSprite;
 };
