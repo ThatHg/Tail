@@ -8,11 +8,11 @@ Enemy::Enemy(Breed & breed) :
     m_health(breed.GetHealth()),
     m_state(new BoidsState(100.0)),
     Entity() {
-    SetSprite(sf::Sprite(AssetsManager::Ref().GetTexture(breed.GetIdlingSprite())));
     m_state->Enter(*this);
 }
 
 void Enemy::FixedUpdate(sf::RenderWindow& window, float delta, const Level& level) {
+    Entity::FixedUpdate(window, delta, level);
     m_state->Update(*this, window, delta, level);
 }
 

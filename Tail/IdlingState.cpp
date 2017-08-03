@@ -16,11 +16,10 @@ EnemyState* IdlingState::HandleCommand(Command command) {
     return NULL;
 }
 
-void IdlingState::Update(Enemy & enemy, sf::RenderWindow&, float, const Level&) {
-    enemy.SetRotation(6);
+void IdlingState::Update(Enemy & enemy, sf::RenderWindow&, float delta, const Level&) {
+    enemy.RectTransform().rotate(10 * delta);
 }
 
-void IdlingState::Enter(Enemy & enemy) {
-    enemy.SetSprite(enemy.GetFollowingSprite());
+void IdlingState::Enter(Enemy &) {
     m_idlingTimer = 0;
 }

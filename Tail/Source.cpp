@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "Level.h"
+#include <stdexcept>
+#include <iostream>
 
 int main()
 {
@@ -7,21 +9,23 @@ int main()
     level.Initialize();
 
     sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML works!");
+    try {
+        while (window.isOpen()) {
+            sf::Event event;
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::Closed)
+                    window.close();
+            }
 
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
+            window.clear(sf::Color(230, 230, 230, 255));
+
+            level.Update(window);
+
+            window.display();
         }
-
-        window.clear(sf::Color(230,230,230,255));
-
-        level.Update(window);
-
-        window.display();
+    }
+    catch (const std::exception& ex) {
+        std::cout << ex.what() << std::endl;
     }
 
     return 0;

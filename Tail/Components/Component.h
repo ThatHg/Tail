@@ -2,6 +2,7 @@
 #define COMPONENT_H
 
 #include <SFML\Graphics.hpp>
+#include <cassert>
 
 class Component;
 class Entity;
@@ -13,8 +14,13 @@ public:
     virtual void Update() = 0;
     virtual void FixedUpdate(sf::RenderWindow& window, float delta, const Level& level) = 0;
     void SetEntity(Entity* entity) { m_entity = entity; };
-    Entity* GetEntity() const { return m_entity; }
-protected:
+    Entity* GetEntity() const {
+#ifdef _DEBUG
+        assert(m_entity != nullptr && "Entity should never be nullptr.");
+#endif
+        return m_entity;
+    }
+private:
     Entity* m_entity;
 };
 

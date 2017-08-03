@@ -8,9 +8,25 @@
 #define PI (3.141592653589793)
 
 
+inline float Dot(const sf::Vector2f a, const sf::Vector2f b) {
+    return a.x * b.x + a.y * b.y;
+}
+
+inline sf::Vector3f Cross(const sf::Vector3f a, const sf::Vector3f b) {
+    return sf::Vector3f(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
+}
+
+inline sf::Vector3f Cross(const sf::Vector2f a, const sf::Vector2f b) {
+    return sf::Vector3f(a.y*1 - 1*b.y, 1*b.x - a.x*1, a.x*b.y - a.y*b.x);
+}
+
 inline float Length(sf::Vector2f vector)
 {
     return std::sqrt((vector.x * vector.x) + (vector.y * vector.y));
+}
+
+inline float Length(sf::Vector3f vector) {
+    return std::sqrt((vector.x * vector.x) + (vector.y * vector.y) + (vector.z * vector.z));
 }
 
 inline void Normalize(sf::Vector2f& vector)

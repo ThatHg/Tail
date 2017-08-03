@@ -4,6 +4,8 @@
 #include "Entity.h"
 
 class InputBase;
+class PhysicsComponent;
+class GraphicsComponent;
 
 class Player : public Entity {
 public:

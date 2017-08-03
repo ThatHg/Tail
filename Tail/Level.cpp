@@ -7,9 +7,8 @@
 #include "Helper.h"
 #include "Breed.h"
 #include "SFMLClockWrapper.h"
-#include "Transform.h"
-#include "Components\PhysicsComponent.h"
-#include "Components\PlayerInputComponent.h"
+#include "Components\AnimationComponent.h"
+#include "AssetsManager.h"
 
 using namespace std;
 
@@ -93,7 +92,8 @@ Level::Level(const char* filename) :
     m_startEnemyCount(0),
     m_entities(),
     m_types(),
-    m_gameTime(0.01, new SFMLClockWrapper())
+    m_gameTime(0.01, new SFMLClockWrapper()),
+    m_loading(true)
 {
     if(m_state == 0)
         cerr << "\nERROR: Unable to create lua state." << endl;
@@ -110,11 +110,8 @@ Level::Level(const char* filename) :
     lua_register(m_state, "get_startenemycount", lua_GetStartEnemyCountWrapper);
     lua_register(m_state, "get_typetospawn", lua_GetTypeToSpawnWrapper);
 
+    m_font.loadFromFile("Assets/Fonts/consola.ttf");
     m_player = new Player();
-    m_player->AddComponent<PlayerInputComponent>();
-    auto c = m_player->AddComponent<PhysicsComponent>();
-    c->EnableGravity(true);
-    m_player->SetPosition(sf::Vector2f(300,300));
 }
 
 Level::~Level()
@@ -134,44 +131,57 @@ void Level::Initialize()
     // Initialize first wave of enemies
     LoadLevel("level1.lua");
     CallLua(m_state, "initialize", this);
+    m_loading = false;
 }
 
+const static int FPS_SAMPLE = 100;
+static double fps_samples[FPS_SAMPLE];
+static int curr_pos(0);
 void Level::Render(sf::RenderWindow& window)
 {
-    sf::Font font;
-    font.loadFromFile("Assets/Fonts/consola.ttf");
     stringstream ss;
     sf::Text text;
-    text.setFont(font);
+    text.setFont(m_font);
     text.setCharacterSize(12);
     text.setFillColor(sf::Color(0, 0, 0));
-    double delta = m_gameTime.DeltaTime();
-    ss << "FPS: " << 1 / (delta == 0.0 ? 1 : delta);
+    fps_samples[curr_pos] = m_gameTime.DeltaTime();
+    curr_pos = (curr_pos + 1) % FPS_SAMPLE;
+    double average = 0.0;
+    for (size_t i = 0; i < FPS_SAMPLE; ++i) {
+        average += fps_samples[i];
+    }
+    average *= (1.0 / FPS_SAMPLE);
+    ss << "FPS: " << 1 / (average == 0.0 ? 1 : average);
     text.setPosition(sf::Vector2f(10.0f,10.0f));
     text.setString(ss.str());
     window.draw(text);
-   
-    // Draw entities
-    window.draw(m_player->GetSprite());
-    for (size_t i = 0; i < m_entities.size(); ++i)
-    {
-        window.draw(m_entities[i]->GetSprite());
+
+    window.draw(m_player->GetComponent<GraphicsComponent>()->GetSprite());
+    for (const auto entity : m_entities) {
+        window.draw(entity->GetComponent<GraphicsComponent>()->GetSprite());
     }
 }
 
 void Level::Update(sf::RenderWindow& window)
 {
+    if (m_loading) {
+        return;
+    }
+
+    m_player->Update();
+    for (const auto entity : m_entities) {
+        entity->Update();
+    }
+
     // Accumulate time from last frame
     m_gameTime.Accumulate();
     float sim_step_size = (float)m_gameTime.StepSize();
     while (m_gameTime.StepForward()) {
         m_player->FixedUpdate(window, sim_step_size, *this);
-
-        for (size_t i = 0; i < m_entities.size(); ++i) {
-            m_entities[i]->FixedUpdate(window, sim_step_size, *this);
+        for (const auto entity : m_entities) {
+            entity->FixedUpdate(window, sim_step_size, *this);
         }
     }
-    m_player->Update();
     Render(window);
 }
 
@@ -181,11 +191,26 @@ void Level::Spawn(const std::string& filename)
 
     // Factorize a new enemy from breed and set spawn.
     Entity* entity = breed->NewEnemy();
-    entity->SetPosition(
-        sf::Vector2f(
-            Random(0, 1280), 
-            Random(0, 720)));
 
+    const auto graphics = entity->AddComponent<GraphicsComponent>();
+    const auto physics = entity->AddComponent<PhysicsComponent>();
+
+    graphics->SetTexture(AssetsManager::Ref().GetTexture("enemy.png"));
+
+    physics->EnableGravity(false);
+    physics->SetPosition(sf::Vector2f(
+        Random(0, 1280),
+        Random(0, 720)));
+
+    AnimationSheetInfo info;
+    info.m_count = 16;
+    info.m_duration = 0.04f;
+    info.m_height = 64;
+    info.m_width = 64;
+    info.m_playback_type = PlaybackType::Loop;
+    info.m_name = "ball_bounce_animation.png";
+    const auto animation = entity->AddComponent<AnimationComponent>();
+    animation->Init(info);
     m_entities.push_back(entity);
 }
 

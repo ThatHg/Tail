@@ -8,6 +8,8 @@
 #include "lua.hpp"
 #include "Config.h"
 #include "GameTime.h"
+#include "Components\PhysicsComponent.h"
+#include "Components\GraphicsComponent.h"
 
 class Entity;
 class Breed;
@@ -29,7 +31,7 @@ public:
     int GetEnemyPerLevelCount();
     int GetStartEnemyCount();
     const Entities& GetEntities() const { return m_entities; }
-    const Entity& GetPlayer() const { return *m_player; }
+    const Entity* GetPlayer() const { return m_player; }
 private:
     Breed* GetBreed(const std::string& filename);
     void LoadLevel(const std::string& filename);
@@ -43,6 +45,8 @@ private:
     lua_State* m_state;
     std::stack<int> m_types; // Pushes type of enemy to spawn on stack
     GameTime m_gameTime;
+    bool m_loading;
+    sf::Font m_font;
 };
 
 #endif

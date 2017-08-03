@@ -36,17 +36,17 @@ void PlayerInputComponent::Update() {
             }
         }
     }
-    /*if (button_pressed == false) {
-    move_dir = entity.GetTransform().Velocity() * -0.7f;
-    }*/
-    if (button_pressed) {
-        auto physics = m_entity->GetComponent<PhysicsComponent>();
-        assert(physics != nullptr);
-        Normalize(move_dir);
 
-        //LimitVelocity(new_velocity);
-        physics->AddForce(move_dir * 100.0f, true);
+    const auto physics = GetEntity()->GetComponent<PhysicsComponent>();
+
+    if (button_pressed == false) {
+        physics->AddForce(sf::Vector2f(physics->Velocity().x * -0.01f, 0), false);
     }
+    else {
+        Normalize(move_dir);
+        physics->AddForce(move_dir * 500.0f, true);
+    }
+   
 }
 
 void PlayerInputComponent::FixedUpdate(sf::RenderWindow &, float, const Level &) {

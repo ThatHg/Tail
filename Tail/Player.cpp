@@ -1,24 +1,37 @@
 #include "Player.h"
-#include "Animation.h"
+
+#include <cassert>
+#include <iostream>
+
+#include "Components\PhysicsComponent.h"
+#include "Components\GraphicsComponent.h"
+#include "Components\PlayerInputComponent.h"
+#include "Components\AnimationComponent.h"
 
 Player::Player() {
-    this->SetSprite("player.png");
+    AddComponent<PlayerInputComponent>();
+    AddComponent<GraphicsComponent>();
+    const auto physics = AddComponent<PhysicsComponent>();
+    physics->EnableGravity(false);
+    physics->SetPosition(sf::Vector2f(300, 300));
+    physics->AddForce(sf::Vector2f(15.0f, 10.0f), sf::Vector2f(364.0f, 364.0f), true);
+
+    const auto animation = AddComponent<AnimationComponent>();
     AnimationSheetInfo info;
-    info.m_frame_count = 8;
-    info.m_frame_height = 64;
-    info.m_frame_width = 64;
-    info.m_sheet_name = "player_open_mouth.png";
-    m_animation = new Animation(info, 0.04, PlaybackType::Bounce);
+    info.m_count = 8;
+    info.m_duration = 0.05f;
+    info.m_height = 64;
+    info.m_width = 64;
+    info.m_playback_type = PlaybackType::Bounce;
+    info.m_name = "player_open_mouth.png";
+    animation->Init(info);
 }
 
 Player::~Player() {
-    //delete _input;
-    delete m_animation;
 }
 
 void Player::Update() {
     Entity::Update();
-    m_animation->Update();
 }
 
 void Player::FixedUpdate(sf::RenderWindow & window, float delta, const Level& level) {

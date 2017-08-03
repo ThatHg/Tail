@@ -14,9 +14,12 @@ public:
 
     void EnableGravity(bool enabled);
     void AddForce(const sf::Vector2f& force, bool is_impulse);
+    void AddForce(const sf::Vector2f& force, const sf::Vector2f& pos, bool is_impulse);
+    void SetPosition(const sf::Vector2f pos);
 private:
-    bool m_gravity_enabled;
     sf::Vector2f m_velocity;
+    float m_angularVelocity;
+    bool m_gravity_enabled;
 };
 
 #endif

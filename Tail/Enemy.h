@@ -25,5 +25,4 @@ private:
     EnemyState* m_state;
 };
 
-
 #endif

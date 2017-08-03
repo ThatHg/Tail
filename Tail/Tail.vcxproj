@@ -160,10 +160,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AssetsManager.cpp" />
     <ClCompile Include="BoidsState.cpp" />
     <ClCompile Include="Breed.cpp" />
+    <ClCompile Include="Components\AnimationComponent.cpp" />
+    <ClCompile Include="Components\ColliderComponent.cpp" />
+    <ClCompile Include="Components\GraphicsComponent.cpp" />
     <ClCompile Include="Components\PhysicsComponent.cpp" />
     <ClCompile Include="Components\PlayerInputComponent.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -177,15 +179,16 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Animation.h" />
     <ClInclude Include="AssetsManager.h" />
     <ClInclude Include="BoidsState.h" />
     <ClInclude Include="Breed.h" />
     <ClInclude Include="Clock.h" />
+    <ClInclude Include="Components\AnimationComponent.h" />
+    <ClInclude Include="Components\ColliderComponent.h" />
     <ClInclude Include="Components\Component.h" />
+    <ClInclude Include="Components\GraphicsComponent.h" />
     <ClInclude Include="Components\PhysicsComponent.h" />
     <ClInclude Include="Components\PlayerInputComponent.h" />
-    <ClInclude Include="Components\Transform.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyState.h" />
@@ -198,6 +201,7 @@
     <ClInclude Include="Level.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SFMLClockWrapper.h" />
+    <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="follower.lua" />

@@ -1,8 +1,8 @@
 #include "BoidsState.h"
 #include "IdlingState.h"
 #include "Enemy.h"
-#include "Transform.h"
 #include "Helper.h"
+#include "Components\PhysicsComponent.h"
 
 BoidsState::BoidsState(float distance) :
 m_distance(distance){
@@ -19,11 +19,12 @@ EnemyState * BoidsState::HandleCommand(Command command) {
 sf::Vector2f BoidsState::Rule1(Level::Entities& e, Entity& enemy) {
     sf::Vector2f center_of_mass(0.0f, 0.0f);
     int flock_size = 0;
+    auto t2 = enemy.RectTransform();
     for (size_t i = 0; i < e.size(); ++i) {
         if (e[i] != &enemy) {
-            Transform t = e[i]->GetTransform();
-            if (Length(t.Position() - enemy.GetTransform().Position()) <= m_distance) {
-                center_of_mass += t.Position();
+            auto t = e[i]->RectTransform();
+            if (Length(t.getPosition() - t2.getPosition()) <= m_distance) {
+                center_of_mass += t.getPosition();
                 flock_size++;
             }
         }
@@ -31,41 +32,44 @@ sf::Vector2f BoidsState::Rule1(Level::Entities& e, Entity& enemy) {
     float inverse = flock_size == 0 ? 1.0f : 1.0f / (float)flock_size;
     center_of_mass *= inverse;
 
-    return ( center_of_mass - enemy.GetTransform().Position()) * 0.01f;
+    return ( center_of_mass - enemy.RectTransform().getPosition()) * 0.01f;
 }
 
 sf::Vector2f BoidsState::Rule2(Level::Entities& e, Entity& enemy) {
     sf::Vector2f displacement(0.0f, 0.0f);
+    auto t2 = enemy.RectTransform();
     for (size_t i = 0; i < e.size(); ++i) {
         if (e[i] != &enemy) {
-            Transform t = e[i]->GetTransform();
-            if (Length(t.Position() - enemy.GetTransform().Position()) < 32) {
-                displacement = displacement - (t.Position() - enemy.GetTransform().Position());
+            auto t = e[i]->RectTransform();
+            if (Length(t.getPosition() - t2.getPosition()) < 32) {
+                displacement = displacement - (t.getPosition() - t2.getPosition());
             }
         }
     }
     return displacement;
 }
 
-sf::Vector2f BoidsState::Rule3(Level::Entities& e, Entity& enemy) {
+sf::Vector2f BoidsState::Rule3(Level::Entities& e, Entity& enemy, PhysicsComponent* pc) {
     sf::Vector2f velocity(0.0f, 0.0f);
     int flock_size = 0;
+    auto t2 = enemy.RectTransform();
     for (size_t i = 0; i < e.size(); ++i) {
         if (e[i] != &enemy) {
-            Transform t = e[i]->GetTransform();
-            if (Length(t.Position() - enemy.GetTransform().Position()) <= m_distance) {
-                velocity += t.Velocity();
+            auto t = e[i]->RectTransform();
+            auto physics = e[i]->GetComponent<PhysicsComponent>();
+            if (Length(t.getPosition() - t2.getPosition()) <= m_distance) {
+                velocity += physics->Velocity();
                 flock_size++;
             }
         }
     }
     float inverse = flock_size == 0 ? 1.0f : 1.0f / (float)flock_size;
     velocity *= inverse;
-    return (velocity - enemy.GetTransform().Velocity()) * 0.1f;
+    return (velocity - pc->Velocity()) * 0.1f;
 }
 
 sf::Vector2f BoidsState::Rule4(Enemy & enemy, sf::RenderWindow & window) {
-    auto pos = enemy.GetTransform().Position();
+    auto pos = enemy.RectTransform().getPosition();
     sf::Vector2f v(0.0f, 0.0f);
     if (pos.x < 0) {
         v.x = 1;
@@ -84,10 +88,18 @@ sf::Vector2f BoidsState::Rule4(Enemy & enemy, sf::RenderWindow & window) {
 }
 
 sf::Vector2f BoidsState::Rule5(Enemy & enemy, const Level & level) {
-    auto player_dir = level.GetPlayer().GetTransform().Position() - enemy.GetTransform().Position();
+    const auto player = level.GetPlayer();
+    auto player_dir = player->RectTransform().getPosition() - enemy.RectTransform().getPosition();
     float len = Length(player_dir);
     if (len < 200) {
-        return player_dir * -(200.0f - len);
+        const auto pc = player->GetComponent<PhysicsComponent>();
+        auto dot = Dot(player_dir, pc->Velocity());
+        if (dot >= 0) {
+            return player_dir * 0.1f;
+        }
+        else {
+            return player_dir * -0.1f;
+        }
     }
     else {
         return sf::Vector2f(0.0f, 0.0f);
@@ -102,27 +114,30 @@ void LimitVelocity(Enemy & enemy, sf::Vector2f& v) {
     }
 }
 
-void BoidsState::Update(Enemy & enemy, sf::RenderWindow & window, float delta, const Level & level) {
+void BoidsState::Update(Enemy & enemy, sf::RenderWindow & window, float, const Level & level) {
+    auto pc = enemy.GetComponent<PhysicsComponent>();
+    auto rectTransform = enemy.RectTransform();
     auto e = level.GetEntities();
-    auto v1 = Rule1(e, enemy);
-    auto v2 = Rule2(e, enemy);
-    auto v3 = Rule3(e, enemy);
-    auto v4 = Rule4(enemy, window);
-    auto v5 = Rule5(enemy, level);
+    sf::Vector2f v = pc->Velocity();
 
-    auto v = enemy.GetTransform().Velocity() + v1 + v2 + v3 + v4 + v5;
+    // Apply boids rules
+    v += Rule1(e, enemy);
+    v += Rule2(e, enemy);
+    v += Rule3(e, enemy, pc);
+    v += Rule4(enemy, window);
+    v += Rule5(enemy, level);
+    v += sf::Vector2f(Random(-10.0f, 10.0f), Random(-10.0f, 10.0f));
 
     LimitVelocity(enemy, v);
 
-    enemy.SetVelocity(v);
-    enemy.SetPosition(enemy.GetTransform().Position() + enemy.GetTransform().Velocity() * delta);
-    float rotation = RotationDeg2D(enemy.GetTransform().Position(), enemy.GetTransform().Position() + enemy.GetTransform().Velocity());
+    pc->AddForce(v, true);
+
+    float rotation = RotationDeg2D(rectTransform.getPosition(), rectTransform.getPosition() + pc->Velocity());
     if (rotation >= 360 || rotation < 0)
         rotation = 0;
-
-    enemy.SetRotation(rotation);
+    
+    rectTransform.setRotation(rotation);
 }
 
-void BoidsState::Enter(Enemy & enemy) {
-    enemy.SetSprite(enemy.GetFollowingSprite());
+void BoidsState::Enter(Enemy &) {
 }
