@@ -1,8 +1,9 @@
 #include "FollowingState.h"
-#include "Enemy.h"
+#include "Entity.h"
 #include "Helper.h"
 #include "IdlingState.h"
 #include "Level.h"
+#include "Components\BreedComponent.h"
 
 EnemyState* FollowingState::HandleCommand(Command command) {
     if (command == Command::IDLE) {
@@ -11,7 +12,7 @@ EnemyState* FollowingState::HandleCommand(Command command) {
     return NULL;
 }
 
-void FollowingState::Update(Enemy & enemy, sf::RenderWindow& window, float delta, const Level&) {
+void FollowingState::Update(Entity & enemy, sf::RenderWindow& window, float delta, const Level&) {
     auto rectTransform = enemy.RectTransform();
 
     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
@@ -29,12 +30,14 @@ void FollowingState::Update(Enemy & enemy, sf::RenderWindow& window, float delta
     sf::Vector2f lookAt = target - position;
     Normalize(lookAt);
 
-    float speed = enemy.GetWalkingSpeed();
+    const auto breed = enemy.GetComponent<BreedComponent>();
+
+    float speed = breed->Speed();
 
     sf::Vector2f newPosition = lookAt * speed * delta * 10.0f;
 
     rectTransform.setPosition(position + newPosition);
 }
 
-void FollowingState::Enter(Enemy &) {
+void FollowingState::Enter(Entity &) {
 }

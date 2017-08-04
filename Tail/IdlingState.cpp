@@ -1,6 +1,6 @@
 #include "IdlingState.h"
 #include "FollowingState.h"
-#include "Enemy.h"
+#include "Entity.h"
 #include "Level.h"
 
 IdlingState::IdlingState() {
@@ -16,10 +16,10 @@ EnemyState* IdlingState::HandleCommand(Command command) {
     return NULL;
 }
 
-void IdlingState::Update(Enemy & enemy, sf::RenderWindow&, float delta, const Level&) {
+void IdlingState::Update(Entity & enemy, sf::RenderWindow&, float delta, const Level&) {
     enemy.RectTransform().rotate(10 * delta);
 }
 
-void IdlingState::Enter(Enemy &) {
+void IdlingState::Enter(Entity &) {
     m_idlingTimer = 0;
 }

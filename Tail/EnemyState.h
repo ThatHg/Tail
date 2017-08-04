@@ -3,7 +3,7 @@
 
 #include <SFML\Graphics.hpp>
 
-class Enemy;
+class Entity;
 class RenderWindow;
 class Level;
 
@@ -21,8 +21,8 @@ class EnemyState {
 public:
     virtual ~EnemyState() {};
     virtual EnemyState* HandleCommand(Command command) = 0;
-    virtual void Update(Enemy& enemy, sf::RenderWindow& window, float delta, const Level& level) = 0;
-    virtual void Enter(Enemy& enemy) = 0;
+    virtual void Update(Entity& enemy, sf::RenderWindow& window, float delta, const Level& level) = 0;
+    virtual void Enter(Entity& enemy) = 0;
 };
 
 #endif

@@ -1,4 +1,0 @@
-HEALTH = 1000.0;
-WALKING_SPEED = 230.0;
-FOLLOWING_SPRITE = "following.png";
-IDLING_SPRITE = "idling.png";

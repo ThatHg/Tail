@@ -162,48 +162,48 @@
   <ItemGroup>
     <ClCompile Include="AssetsManager.cpp" />
     <ClCompile Include="BoidsState.cpp" />
-    <ClCompile Include="Breed.cpp" />
     <ClCompile Include="Components\AnimationComponent.cpp" />
+    <ClCompile Include="Components\BreedComponent.cpp" />
     <ClCompile Include="Components\ColliderComponent.cpp" />
+    <ClCompile Include="Components\Component.cpp" />
     <ClCompile Include="Components\GraphicsComponent.cpp" />
     <ClCompile Include="Components\PhysicsComponent.cpp" />
     <ClCompile Include="Components\PlayerInputComponent.cpp" />
-    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="EntityFactory.cpp" />
     <ClCompile Include="FollowingState.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="IdlingState.cpp" />
     <ClCompile Include="KeyBinding.cpp" />
     <ClCompile Include="Level.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetsManager.h" />
     <ClInclude Include="BoidsState.h" />
-    <ClInclude Include="Breed.h" />
     <ClInclude Include="Clock.h" />
     <ClInclude Include="Components\AnimationComponent.h" />
+    <ClInclude Include="Components\BreedComponent.h" />
     <ClInclude Include="Components\ColliderComponent.h" />
     <ClInclude Include="Components\Component.h" />
     <ClInclude Include="Components\GraphicsComponent.h" />
     <ClInclude Include="Components\PhysicsComponent.h" />
     <ClInclude Include="Components\PlayerInputComponent.h" />
     <ClInclude Include="Config.h" />
-    <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyState.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="EntityFactory.h" />
     <ClInclude Include="FollowingState.h" />
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="IdlingState.h" />
     <ClInclude Include="KeyBinding.h" />
     <ClInclude Include="Level.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="SFMLClockWrapper.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="follower.lua" />
+    <None Include="basic_enemy.lua" />
+    <None Include="basic_player.lua" />
     <None Include="key_bindings.lua" />
     <None Include="level.lua" />
     <None Include="level1.lua" />

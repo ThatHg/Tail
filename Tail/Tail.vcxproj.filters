@@ -36,19 +36,10 @@
     <ClCompile Include="FollowingState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Breed.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="IdlingState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameTime.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="KeyBinding.cpp">
@@ -72,6 +63,15 @@
     <ClCompile Include="Components\GraphicsComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="EntityFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\BreedComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Component.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetsManager.h">
@@ -86,13 +86,7 @@
     <ClInclude Include="Level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FollowingState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Breed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IdlingState.h">
@@ -108,9 +102,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SFMLClockWrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Config.h">
@@ -140,18 +131,27 @@
     <ClInclude Include="Components\GraphicsComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="EntityFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\BreedComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="level.lua">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="follower.lua">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="level1.lua">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="key_bindings.lua">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="basic_player.lua">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="basic_enemy.lua">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

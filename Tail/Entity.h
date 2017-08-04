@@ -10,6 +10,7 @@ class Component;
 class Entity
 {
 public:
+    Entity();
     virtual ~Entity();
     virtual void Update();
     virtual void FixedUpdate(sf::RenderWindow& window, float delta, const Level& level);
@@ -26,9 +27,6 @@ public:
 
     template <typename T> T* GetComponent() const { return GetComponent<T>(typeid(T).hash_code()); }
     template <typename T> T* GetComponent(std::size_t key) const;
-protected:
-    Entity();
-
 private:
     sf::RectangleShape m_rectTransform;
     std::map<std::size_t, Component*> m_components;

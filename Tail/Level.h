@@ -6,20 +6,15 @@
 #include <stack>
 #include <map>
 #include "lua.hpp"
-#include "Config.h"
 #include "GameTime.h"
-#include "Components\PhysicsComponent.h"
-#include "Components\GraphicsComponent.h"
+#include "EntityFactory.h"
 
 class Entity;
-class Breed;
-class TransformComponent;
 
 class Level
 {
 public:
     typedef std::vector<Entity*> Entities;
-    typedef std::map<std::string, Breed*> EnemyBreeds;
 
     Level(const char* filename);
     ~Level();
@@ -33,7 +28,6 @@ public:
     const Entities& GetEntities() const { return m_entities; }
     const Entity* GetPlayer() const { return m_player; }
 private:
-    Breed* GetBreed(const std::string& filename);
     void LoadLevel(const std::string& filename);
     void Render(sf::RenderWindow& window);
 
@@ -41,12 +35,12 @@ private:
     int m_startEnemyCount;
     Entities m_entities;
     Entity* m_player;
-    EnemyBreeds m_breeds;
     lua_State* m_state;
     std::stack<int> m_types; // Pushes type of enemy to spawn on stack
     GameTime m_gameTime;
     bool m_loading;
     sf::Font m_font;
+    EntityFactory m_entityFactory;
 };
 
 #endif

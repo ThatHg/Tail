@@ -1,8 +1,9 @@
 #include "BoidsState.h"
 #include "IdlingState.h"
-#include "Enemy.h"
+#include "Entity.h"
 #include "Helper.h"
 #include "Components\PhysicsComponent.h"
+#include "Components\BreedComponent.h"
 
 BoidsState::BoidsState(float distance) :
 m_distance(distance){
@@ -68,7 +69,7 @@ sf::Vector2f BoidsState::Rule3(Level::Entities& e, Entity& enemy, PhysicsCompone
     return (velocity - pc->Velocity()) * 0.1f;
 }
 
-sf::Vector2f BoidsState::Rule4(Enemy & enemy, sf::RenderWindow & window) {
+sf::Vector2f BoidsState::Rule4(Entity & enemy, sf::RenderWindow & window) {
     auto pos = enemy.RectTransform().getPosition();
     sf::Vector2f v(0.0f, 0.0f);
     if (pos.x < 0) {
@@ -87,7 +88,7 @@ sf::Vector2f BoidsState::Rule4(Enemy & enemy, sf::RenderWindow & window) {
     return v * encouragement;
 }
 
-sf::Vector2f BoidsState::Rule5(Enemy & enemy, const Level & level) {
+sf::Vector2f BoidsState::Rule5(Entity & enemy, const Level & level) {
     const auto player = level.GetPlayer();
     auto player_dir = player->RectTransform().getPosition() - enemy.RectTransform().getPosition();
     float len = Length(player_dir);
@@ -106,15 +107,16 @@ sf::Vector2f BoidsState::Rule5(Enemy & enemy, const Level & level) {
     }
 }
 
-void LimitVelocity(Enemy & enemy, sf::Vector2f& v) {
+void LimitVelocity(Entity & enemy, sf::Vector2f& v) {
     float l = Length(v);
     float inv = l == 0.0f ? 1.0f : 1.0f / l;
-    if (l > enemy.GetWalkingSpeed()) {
-        v = v * inv * enemy.GetWalkingSpeed();
+    const auto breed = enemy.GetComponent<BreedComponent>();
+    if (l > breed->Speed()) {
+        v = v * inv * breed->Speed();
     }
 }
 
-void BoidsState::Update(Enemy & enemy, sf::RenderWindow & window, float, const Level & level) {
+void BoidsState::Update(Entity & enemy, sf::RenderWindow & window, float, const Level & level) {
     auto pc = enemy.GetComponent<PhysicsComponent>();
     auto rectTransform = enemy.RectTransform();
     auto e = level.GetEntities();
@@ -139,5 +141,5 @@ void BoidsState::Update(Enemy & enemy, sf::RenderWindow & window, float, const L
     rectTransform.setRotation(rotation);
 }
 
-void BoidsState::Enter(Enemy &) {
+void BoidsState::Enter(Entity &) {
 }

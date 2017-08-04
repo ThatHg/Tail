@@ -1,14 +1,12 @@
 #include <iostream>
 #include <sstream>
 #include "Level.h"
-#include "Enemy.h"
 #include "Entity.h"
-#include "Player.h"
 #include "Helper.h"
-#include "Breed.h"
 #include "SFMLClockWrapper.h"
-#include "Components\AnimationComponent.h"
-#include "AssetsManager.h"
+#include "Config.h"
+
+#include "Components\GraphicsComponent.h"
 
 using namespace std;
 
@@ -111,7 +109,8 @@ Level::Level(const char* filename) :
     lua_register(m_state, "get_typetospawn", lua_GetTypeToSpawnWrapper);
 
     m_font.loadFromFile("Assets/Fonts/consola.ttf");
-    m_player = new Player();
+
+    m_player = m_entityFactory.CreatePlayer("basic_player.lua");
 }
 
 Level::~Level()
@@ -187,30 +186,7 @@ void Level::Update(sf::RenderWindow& window)
 
 void Level::Spawn(const std::string& filename)
 {
-    Breed* breed = GetBreed(filename);
-
-    // Factorize a new enemy from breed and set spawn.
-    Entity* entity = breed->NewEnemy();
-
-    const auto graphics = entity->AddComponent<GraphicsComponent>();
-    const auto physics = entity->AddComponent<PhysicsComponent>();
-
-    graphics->SetTexture(AssetsManager::Ref().GetTexture("enemy.png"));
-
-    physics->EnableGravity(false);
-    physics->SetPosition(sf::Vector2f(
-        Random(0, 1280),
-        Random(0, 720)));
-
-    AnimationSheetInfo info;
-    info.m_count = 16;
-    info.m_duration = 0.04f;
-    info.m_height = 64;
-    info.m_width = 64;
-    info.m_playback_type = PlaybackType::Loop;
-    info.m_name = "ball_bounce_animation.png";
-    const auto animation = entity->AddComponent<AnimationComponent>();
-    animation->Init(info);
+    const auto entity = m_entityFactory.CreateEnemy(filename);
     m_entities.push_back(entity);
 }
 
@@ -229,32 +205,6 @@ void Level::LoadLevel(const std::string& filename) {
     Config levelConfig(filename);
     m_startEnemyCount = levelConfig.GrabInteger("START_ENEMY_COUNT");
     m_enemiesPerLevelCount = levelConfig.GrabInteger("ENEMY_PER_LEVEL_COUNT");
-}
-
-Breed* Level::GetBreed(const std::string& filename) {
-    EnemyBreeds::iterator itr = m_breeds.find(filename);
-    if (itr != m_breeds.end()) {
-        return itr->second;
-    }
-    else {
-        // Load enemy variables from lua file
-        Config enemyConfig(filename);
-        float health = (float)enemyConfig.GrabReal("HEALTH");
-        float walkingSpeed = (float)enemyConfig.GrabReal("WALKING_SPEED");
-        const char* followingSprite = enemyConfig.GrabString("FOLLOWING_SPRITE");
-        const char* idlingSprite = enemyConfig.GrabString("IDLING_SPRITE");
-
-        Breed *breed = new Breed(
-            health,
-            walkingSpeed,
-            idlingSprite,
-            followingSprite
-            );
-
-        // Create an enemy breed
-        m_breeds[filename] = breed;
-        return breed;
-    }
 }
 
 int Level::GetTypeToSpawn()
