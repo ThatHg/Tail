@@ -1,4 +1,5 @@
 #include "Component.h"
+#include <cassert>
 
 Component::~Component() {
 }
