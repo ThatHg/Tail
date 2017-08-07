@@ -131,6 +131,7 @@ void Level::Initialize()
     LoadLevel("level1.lua");
     CallLua(m_state, "initialize", this);
     m_loading = false;
+    m_particleSystem.SpawnParticles();
 }
 
 const static int FPS_SAMPLE = 100;
@@ -154,7 +155,7 @@ void Level::Render(sf::RenderWindow& window)
     text.setPosition(sf::Vector2f(10.0f,10.0f));
     text.setString(ss.str());
     window.draw(text);
-
+    m_particleSystem.Draw(window);
     window.draw(m_player->GetComponent<GraphicsComponent>()->GetSprite());
     for (const auto entity : m_entities) {
         window.draw(entity->GetComponent<GraphicsComponent>()->GetSprite());
@@ -180,6 +181,7 @@ void Level::Update(sf::RenderWindow& window)
         for (const auto entity : m_entities) {
             entity->FixedUpdate(window, sim_step_size, *this);
         }
+        m_particleSystem.FixedUpdate(m_gameTime);
     }
     Render(window);
 }

@@ -8,6 +8,7 @@
 #include "lua.hpp"
 #include "GameTime.h"
 #include "EntityFactory.h"
+#include "ParticleSystem.h"
 
 class Entity;
 
@@ -41,6 +42,7 @@ private:
     bool m_loading;
     sf::Font m_font;
     EntityFactory m_entityFactory;
+    ParticleSystem m_particleSystem;
 };
 
 #endif

@@ -43,9 +43,13 @@ double GameTime::StepSize() {
     return m_stepSize;
 }
 
-double GameTime::DeltaTime() {
+const double GameTime::DeltaTime() const {
     double newTime = m_clock->Time();
     return newTime - m_currentTime;
+}
+
+const double GameTime::Time() const {
+    return m_clock->Time();
 }
 
 double GameTime::BlendFactor() {
