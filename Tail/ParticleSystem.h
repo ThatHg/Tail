@@ -16,10 +16,7 @@ public:
     void SpawnParticles();
     void Create(float lifetime, float x, float y, float xVel, float yVel);
 private:
-    struct {
-        sf::Texture texture;
-        sf::Vertex vertices[4];
-    } m_particle;
+    sf::Sprite m_spriteParticle;
     Particle m_particles[MAX_PARTICLES];
     Particle* m_nextParticle;
 };

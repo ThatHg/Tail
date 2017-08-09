@@ -15,22 +15,7 @@ ParticleSystem::ParticleSystem() {
     // Terminate the list with NULL as the last pointer value
     m_particles[MAX_PARTICLES - 1].SetNext(nullptr);
 
-    // Initialize the graphics for our particles.
-    m_particle.texture = AssetsManager::Ref().GetTexture("particle.png");
-    m_particle.vertices[3] = sf::Vector2f(0.0f, 0.0f);
-    m_particle.vertices[2] = sf::Vector2f(0.0f, m_particle.texture.getSize().y);
-    m_particle.vertices[1] = sf::Vector2f(m_particle.texture.getSize().x, m_particle.texture.getSize().y);
-    m_particle.vertices[0] = sf::Vector2f(m_particle.texture.getSize().x, 0);
-
-    m_particle.vertices[3].color = sf::Color::White;
-    m_particle.vertices[2].color = sf::Color::White;
-    m_particle.vertices[1].color = sf::Color::White;
-    m_particle.vertices[0].color = sf::Color::White;
-
-    m_particle.vertices[3].texCoords = sf::Vector2f(0.0f, 0.0f);
-    m_particle.vertices[2].texCoords = sf::Vector2f(0.0f, 1.0f);
-    m_particle.vertices[1].texCoords = sf::Vector2f(1.0f, 1.0f);
-    m_particle.vertices[0].texCoords = sf::Vector2f(1.0f, 0.0f);
+    m_spriteParticle.setTexture(AssetsManager::Ref().GetTexture("particle.png"));
 }
 
 ParticleSystem::~ParticleSystem() {
@@ -45,26 +30,21 @@ void ParticleSystem::FixedUpdate(const GameTime & gametTime) {
 }
 
 void ParticleSystem::Draw(sf::RenderWindow & window) {
-    sf::RenderStates state;
-    state.blendMode = sf::BlendNone;
-    state.texture = &m_particle.texture;
     for (size_t i = 0; i < MAX_PARTICLES; ++i) {
-        if (!m_particles[i].Active())continue;
-        sf::Transform transform;
-        transform.translate(m_particles[i].Position());
-        state.transform = transform;
-        window.draw(m_particle.vertices, 4, sf::Quads, state);
+        if (!m_particles[i].Active()) { continue; }
+        m_spriteParticle.setPosition(m_particles[i].Position());
+        window.draw(m_spriteParticle);
     }
 }
 
 void ParticleSystem::SpawnParticles() {
     const int particles_count = 1000;
     const float inverse_count = 360.0f / particles_count;
-    const float speed = 60.0f;
+    const float speed = 600.0f;
     for (size_t i = 0; i < particles_count; i++) {
         float xv = std::cos(i * inverse_count);
         float yv = std::sin(i * inverse_count);
-        Create(3000, 300.0f, 300.0f, xv * speed, yv * speed);
+        Create(30000, 300.0f, 300.0f, xv * speed, yv * speed);
     }
 }
 

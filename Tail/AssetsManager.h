@@ -11,11 +11,12 @@ public:
     ~AssetsManager();
     static AssetsManager& Ref();
     const sf::Texture& GetTexture(const std::string& name);
+    const sf::Texture* GetTexturePointer(const std::string& name);
 
     void ReleaseTextures();
 private:
-    typedef std::map<std::string, sf::Texture> TextureMap;
-    typedef std::map<std::string, sf::Texture>::iterator TextureMapIterator;	
+    typedef std::map<std::string, sf::Texture*> TextureMap;
+    typedef std::map<std::string, sf::Texture*>::iterator TextureMapIterator;	
     
     AssetsManager();
     AssetsManager(const AssetsManager& am);
