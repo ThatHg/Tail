@@ -6,6 +6,7 @@
 class Component;
 class Entity;
 class Level;
+class GameTime;
 
 class Component {
 public:

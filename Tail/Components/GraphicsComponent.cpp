@@ -9,7 +9,6 @@ void GraphicsComponent::Update() {
     m_sprite.setPosition(rect.getPosition());
     m_sprite.setRotation(rect.getRotation());
 }
-void GraphicsComponent::FixedUpdate(sf::RenderWindow & , float , const Level &) {}
 
 const sf::Sprite & GraphicsComponent::GetSprite() const {
     return m_sprite;

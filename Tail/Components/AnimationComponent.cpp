@@ -37,9 +37,6 @@ void AnimationComponent::Update() {
     }
 }
 
-void AnimationComponent::FixedUpdate(sf::RenderWindow &, float, const Level &) {
-}
-
 void AnimationComponent::Next() {
     // Move to next frame in front of or behind current frame.
     m_current_frame += 1 * m_play_direction;

@@ -28,7 +28,6 @@ public:
     AnimationComponent();
     void Init(const AnimationSheetInfo& info);
     virtual void Update();
-    virtual void FixedUpdate(sf::RenderWindow& window, float delta, const Level& level);
 private:
     void Next();
     void ChangeFrame();

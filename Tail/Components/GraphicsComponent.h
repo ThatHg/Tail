@@ -9,7 +9,6 @@ class GraphicsComponent : public Component {
 public:
     GraphicsComponent();
     virtual void Update();
-    virtual void FixedUpdate(sf::RenderWindow& window, float delta, const Level& level);
     const sf::Sprite& GetSprite() const;
     void SetTexture(const sf::Texture& tex);
     void SetRect(const sf::IntRect& rect);
