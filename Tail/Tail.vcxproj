@@ -171,13 +171,13 @@
     <ClCompile Include="Components\PlayerInputComponent.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityFactory.cpp" />
+    <ClCompile Include="FireParticleSystem.cpp" />
     <ClCompile Include="FollowingState.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="IdlingState.cpp" />
     <ClCompile Include="KeyBinding.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Particle.cpp" />
-    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -195,6 +195,7 @@
     <ClInclude Include="EnemyState.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityFactory.h" />
+    <ClInclude Include="FireParticleSystem.h" />
     <ClInclude Include="FollowingState.h" />
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="Helper.h" />

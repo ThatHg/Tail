@@ -8,7 +8,7 @@ int main()
     Level level("level.lua");
     level.Initialize();
 
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(720, 720), "SFML works!");
     try {
         while (window.isOpen()) {
             sf::Event event;

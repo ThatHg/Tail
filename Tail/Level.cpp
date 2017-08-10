@@ -5,6 +5,7 @@
 #include "Helper.h"
 #include "SFMLClockWrapper.h"
 #include "Config.h"
+#include "FireParticleSystem.h"
 
 #include "Components\GraphicsComponent.h"
 
@@ -123,6 +124,7 @@ Level::~Level()
     lua_close(m_state);
     m_state = 0;
     delete m_player;
+    delete m_particleSystem;
 }
 
 void Level::Initialize()
@@ -131,7 +133,9 @@ void Level::Initialize()
     LoadLevel("level1.lua");
     CallLua(m_state, "initialize", this);
     m_loading = false;
-    m_particleSystem.SpawnParticles();
+    float half_window = 720.0f * 0.5f;
+    m_particleSystem = new FireParticleSystem(half_window, sf::Vector2f(half_window, half_window));
+    m_particleSystem->Activate();
 }
 
 const static int FPS_SAMPLE = 100;
@@ -143,7 +147,7 @@ void Level::Render(sf::RenderWindow& window)
     sf::Text text;
     text.setFont(m_font);
     text.setCharacterSize(12);
-    text.setFillColor(sf::Color(0, 0, 0));
+    text.setFillColor(sf::Color(201, 0, 0));
     fps_samples[curr_pos] = m_gameTime.DeltaTime();
     curr_pos = (curr_pos + 1) % FPS_SAMPLE;
     double average = 0.0;
@@ -152,14 +156,16 @@ void Level::Render(sf::RenderWindow& window)
     }
     average *= (1.0 / FPS_SAMPLE);
     ss << "FPS: " << 1 / (average == 0.0 ? 1 : average);
+    ss << "\nParticles: " << m_particleSystem->ActiveParticles();
     text.setPosition(sf::Vector2f(10.0f,10.0f));
     text.setString(ss.str());
-    window.draw(text);
-    m_particleSystem.Draw(window);
+    m_particleSystem->Draw(window);
     window.draw(m_player->GetComponent<GraphicsComponent>()->GetSprite());
     for (const auto entity : m_entities) {
         window.draw(entity->GetComponent<GraphicsComponent>()->GetSprite());
     }
+
+    window.draw(text);
 }
 
 void Level::Update(sf::RenderWindow& window)
@@ -168,20 +174,22 @@ void Level::Update(sf::RenderWindow& window)
         return;
     }
 
+    // Accumulate last frame's time
+    m_gameTime.Accumulate();
+
     m_player->Update();
     for (const auto entity : m_entities) {
         entity->Update();
     }
-
-    // Accumulate time from last frame
-    m_gameTime.Accumulate();
+    m_particleSystem->Update(m_gameTime);
+    
     float sim_step_size = (float)m_gameTime.StepSize();
     while (m_gameTime.StepForward()) {
         m_player->FixedUpdate(window, sim_step_size, *this);
         for (const auto entity : m_entities) {
             entity->FixedUpdate(window, sim_step_size, *this);
         }
-        m_particleSystem.FixedUpdate(m_gameTime);
+        m_particleSystem->FixedUpdate(sim_step_size);
     }
     Render(window);
 }

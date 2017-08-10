@@ -4,6 +4,7 @@
 #include <math.h>
 #include <random>
 #include <SFML\Graphics.hpp>
+#include <cassert>
 
 #define PI (3.141592653589793)
 
@@ -72,10 +73,12 @@ inline float RotationRad2D(sf::Vector2f from, sf::Vector2f to)
     return radian_aTob;
 }
 
+static std::random_device randomDevice;
+static std::mt19937 marsenneTwister(randomDevice());
 inline float Random(float a, float b)
 {
-    std::random_device randomDevice;
-    std::mt19937 marsenneTwister(randomDevice());
+    assert(a <= b && "Random generator - left value must be smaller than right value");
+
     std::uniform_real_distribution<> dist(a, b);
 
     return (float)dist(marsenneTwister);

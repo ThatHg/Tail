@@ -10,23 +10,17 @@ public:
     Particle();
     bool Active() const;
     void Update();
-    bool FixedUpdate(const GameTime& gameTime);
-    void Init(int lifetime, float x, float y, float xVel, float yVel);
+    bool FixedUpdate(float delta);
+    void Move(const sf::Vector2f& offset);
+    void AddForce(const sf::Vector2f& force);
+    void Init(int lifetime, const sf::Vector2f& start_pos, const sf::Vector2f& start_vel);
     sf::Vector2f Position() const;
     sf::Vector2f Velocity() const;
-    Particle* Next() const;
-    void SetNext(Particle* next);
 
 private:
-    union {
-        struct {
-            float x,y;
-            float xVel, yVel;
-        } live;
-        Particle* next;
-    } m_state;
-
-    float m_framesLeft;
+    sf::Vector2f m_position;
+    sf::Vector2f m_velocity;
+    int m_framesLeft;
 };
 
 #endif

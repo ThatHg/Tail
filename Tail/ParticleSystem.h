@@ -1,24 +1,20 @@
 #ifndef PARTICLE_SYSTEM_H
 #define PARTICLE_SYSTEM_H
 
-#include "Particle.h"
-#include <SFML\Graphics.hpp>
+#include <SFML\Graphics\RenderWindow.hpp>
 
-static const int MAX_PARTICLES = 10000;
+class GameTime;
 
 class ParticleSystem {
 public:
-    ParticleSystem();
-    ~ParticleSystem();
+    virtual ~ParticleSystem() {};
 
-    void FixedUpdate(const GameTime& gametTime);
-    void Draw(sf::RenderWindow& window);
-    void SpawnParticles();
-    void Create(float lifetime, float x, float y, float xVel, float yVel);
-private:
-    sf::Sprite m_spriteParticle;
-    Particle m_particles[MAX_PARTICLES];
-    Particle* m_nextParticle;
+    virtual void Update(const GameTime& gametTime) = 0;
+    virtual void FixedUpdate(float delta) = 0;
+    virtual void Draw(sf::RenderWindow& window) = 0;
+    virtual void Activate() = 0;
+    virtual void Deactivate() = 0;
+    virtual int ActiveParticles() { return 0; }
 };
 
 #endif // !PARTICLE_SYSTEM_H
