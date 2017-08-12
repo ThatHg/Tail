@@ -19,6 +19,9 @@
     <Filter Include="Source Files\Components">
       <UniqueIdentifier>{ff713b72-5f67-43e7-8658-bdceb9d79405}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{1393876c-36de-490c-b0d2-e394180d4ef0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -168,6 +171,12 @@
     </None>
     <None Include="basic_enemy.lua">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\Shaders\circle_gradient.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="Resources\Shaders\circle_gradient.vert">
+      <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

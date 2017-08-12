@@ -212,6 +212,8 @@
     <None Include="key_bindings.lua" />
     <None Include="level.lua" />
     <None Include="level1.lua" />
+    <None Include="Resources\Shaders\circle_gradient.frag" />
+    <None Include="Resources\Shaders\circle_gradient.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

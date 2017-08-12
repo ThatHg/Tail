@@ -109,7 +109,7 @@ Level::Level(const char* filename) :
     lua_register(m_state, "get_startenemycount", lua_GetStartEnemyCountWrapper);
     lua_register(m_state, "get_typetospawn", lua_GetTypeToSpawnWrapper);
 
-    m_font.loadFromFile("Assets/Fonts/consola.ttf");
+    m_font.loadFromFile("Resources/Fonts/consola.ttf");
 
     m_player = m_entityFactory.CreatePlayer("basic_player.lua");
 }
@@ -124,7 +124,10 @@ Level::~Level()
     lua_close(m_state);
     m_state = 0;
     delete m_player;
-    delete m_particleSystem;
+    for (const auto system : m_particleSystems) {
+        delete system;
+    }
+    m_particleSystems.clear();
 }
 
 void Level::Initialize()
@@ -134,8 +137,12 @@ void Level::Initialize()
     CallLua(m_state, "initialize", this);
     m_loading = false;
     float half_window = 720.0f * 0.5f;
-    m_particleSystem = new FireParticleSystem(half_window, sf::Vector2f(half_window, half_window));
-    m_particleSystem->Activate();
+    m_particleSystems.push_back(new FireParticleSystem(100.0f, sf::Vector2f(half_window - 200, half_window + 300)));
+    m_particleSystems.push_back(new FireParticleSystem(100.0f, sf::Vector2f(half_window, half_window)));
+    m_particleSystems.push_back(new FireParticleSystem(100.0f, sf::Vector2f(half_window + 200, half_window + 300)));
+    for (const auto system : m_particleSystems) {
+        system->Activate();
+    }
 }
 
 const static int FPS_SAMPLE = 100;
@@ -156,10 +163,14 @@ void Level::Render(sf::RenderWindow& window)
     }
     average *= (1.0 / FPS_SAMPLE);
     ss << "FPS: " << 1 / (average == 0.0 ? 1 : average);
-    ss << "\nParticles: " << m_particleSystem->ActiveParticles();
+    int active = 0;
+    for (const auto system : m_particleSystems) { active += system->ActiveParticles(); }
+    ss << "\nParticles: " << active;
     text.setPosition(sf::Vector2f(10.0f,10.0f));
     text.setString(ss.str());
-    m_particleSystem->Draw(window);
+    for (const auto system : m_particleSystems) {
+        system->Draw(window);
+    }
     window.draw(m_player->GetComponent<GraphicsComponent>()->GetSprite());
     for (const auto entity : m_entities) {
         window.draw(entity->GetComponent<GraphicsComponent>()->GetSprite());
@@ -181,15 +192,18 @@ void Level::Update(sf::RenderWindow& window)
     for (const auto entity : m_entities) {
         entity->Update();
     }
-    m_particleSystem->Update(m_gameTime);
-    
+    for (const auto system : m_particleSystems) {
+        system->Update(m_gameTime, window);
+    }
     float sim_step_size = (float)m_gameTime.StepSize();
     while (m_gameTime.StepForward()) {
         m_player->FixedUpdate(window, sim_step_size, *this);
         for (const auto entity : m_entities) {
             entity->FixedUpdate(window, sim_step_size, *this);
         }
-        m_particleSystem->FixedUpdate(sim_step_size);
+        for (const auto system : m_particleSystems) {
+            system->FixedUpdate(sim_step_size);
+        }
     }
     Render(window);
 }

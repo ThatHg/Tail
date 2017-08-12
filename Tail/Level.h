@@ -42,7 +42,7 @@ private:
     bool m_loading;
     sf::Font m_font;
     EntityFactory m_entityFactory;
-    ParticleSystem* m_particleSystem;
+   std::vector< ParticleSystem*> m_particleSystems;
 };
 
 #endif

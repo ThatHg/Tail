@@ -3,7 +3,7 @@
 
 using namespace std;
 
-const static string PICTURE_PATH = "Assets/Pictures/";
+const static string PICTURE_PATH = "Resources/Images/";
 
 AssetsManager AssetsManager::m_instance;
 AssetsManager&	AssetsManager::Ref()
