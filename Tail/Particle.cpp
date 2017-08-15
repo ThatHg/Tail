@@ -15,26 +15,26 @@ bool Particle::FixedUpdate(float delta) {
     return m_framesLeft == 0;
 }
 
-void Particle::Move(const sf::Vector3f & offset) {
+void Particle::Move(const sf::Vector2f & offset) {
     m_position = m_position + offset;
 }
 
-void Particle::AddForce(const sf::Vector3f & force) {
+void Particle::AddForce(const sf::Vector2f & force) {
     m_velocity = m_velocity + force;
 }
 
-void Particle::Init(int lifetime, const sf::Vector3f & pos, const sf::Vector3f & vel) {
+void Particle::Init(int lifetime, const sf::Vector2f & pos, const sf::Vector2f & vel) {
     m_position = pos;
     m_velocity = vel;
     m_framesLeft = lifetime;
     m_originalFrames = lifetime;
 }
 
-const sf::Vector3f& Particle::Position() const {
+const sf::Vector2f& Particle::Position() const {
     return m_position;
 }
 
-const sf::Vector3f& Particle::Velocity() const {
+const sf::Vector2f& Particle::Velocity() const {
     return m_velocity;
 }
 

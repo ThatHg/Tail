@@ -137,11 +137,14 @@ void Level::Initialize()
     CallLua(m_state, "initialize", this);
     m_loading = false;
     float half_window = 720.0f * 0.5f;
-    m_particleSystems.push_back(new FireParticleSystem(100.0f, sf::Vector2f(half_window - 200, half_window + 300)));
-    m_particleSystems.push_back(new FireParticleSystem(100.0f, sf::Vector2f(half_window, half_window)));
-    m_particleSystems.push_back(new FireParticleSystem(100.0f, sf::Vector2f(half_window + 200, half_window + 300)));
-    for (const auto system : m_particleSystems) {
-        system->Activate();
+    m_particleSystems.push_back(new FireParticleSystem(1.0f, sf::Vector2f(half_window - 200, half_window), sf::Color::Blue));
+    m_particleSystems.push_back(new FireParticleSystem(1.0f, sf::Vector2f(half_window, half_window), sf::Color::Black));
+    m_particleSystems.push_back(new FireParticleSystem(1.0f, sf::Vector2f(half_window + 200, half_window), sf::Color::Red));
+    m_particleSystems.push_back(new FireParticleSystem(1.0f, sf::Vector2f(half_window - 100, half_window + 150), sf::Color::Yellow));
+    m_particleSystems.push_back(new FireParticleSystem(1.0f, sf::Vector2f(half_window + 100, half_window + 150), sf::Color::Green));
+
+    for (size_t i = 0; i < m_particleSystems.size(); i++) {
+        m_particleSystems[i]->Activate();
     }
 }
 
